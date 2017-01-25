@@ -87,7 +87,7 @@ component accessors="true"
 	public string function buildRedirectToAuthURL( struct parameters={} ) {
 		return getAuthEndpoint() & '?client_id=' & getClient_id() & '&redirect_uri=' & getRedirect_uri() & buildParamString(argScope = arguments.parameters);
 	}
-	
+
 	/**
 	* @hint I make the HTTP request to obtain the access token.
 	* @description I make the HTTP request to obtain the access token.
@@ -95,22 +95,22 @@ component accessors="true"
 	**/
 	public struct function makeAccessTokenRequest( required string code ) {
 		var stuResponse = {};
-		    httpService = new http(); 
-		    httpService.setMethod("post"); 
-		    httpService.setCharset("utf-8"); 
-		    httpService.setUrl(getAccessTokenEndpoint());
-		    httpService.addParam(type="formfield", name="client_id", 	 value="#getClient_id()#");
-		    httpService.addParam(type="formfield", name="client_secret", value="#getClient_secret()#");
-		    httpService.addParam(type="formfield", name="code", 		 value="#arguments.code#");
-		    httpService.addParam(type="formfield", name="redirect_uri",  value="#getRedirect_uri()#");
-		    result = httpService.send().getPrefix();
-		    if('200' == result.ResponseHeader['Status_Code']) {
-		    	stuResponse.success = true;
-		    	stuResponse.content = result.FileContent;
-		    } else {
-		    	stuResponse.success = false;
-		    	stuResponse.content = result.Statuscode;
-		    }
+
+        cfhttp( url=getAccessTokenEndpoint(), method="post", charset="utf-8", result="result" ) {
+            cfhttpparam( type="formfield", name="client_id", value="#getClient_id()#" );
+            cfhttpparam( type="formfield", name="client_secret", value="#getClient_secret()#" );
+            cfhttpparam( type="formfield", name="grant_type", value="#arguments.code#" );
+            cfhttpparam( type="formfield", name="redirect_uri", value="#getRedirect_uri()#" );
+        }
+
+	    if(result.statusCode == '200 OK') {
+	    	stuResponse.success = true;
+	    	stuResponse.content = result.FileContent;
+	    } else {
+	    	stuResponse.success = false;
+	    	stuResponse.content = result.Statuscode;
+	    }
+
 	    return stuResponse;
 	}
 	
