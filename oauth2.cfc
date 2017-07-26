@@ -1,13 +1,13 @@
 ﻿/**
-* @displayname oauth2
+* @displayname CFC OAuth2 Manager
+* @name OAuth2 CFC
 * @output false
 * @hint The oauth2 object.
-* @author Matt Gifford
-* @website http://www.mattgifford.co.uk/
+* @author Giampiero Bonifazi (forked  https://github.com/coldfumonkeh/oauth2 - Matt Gifford)
 * @purpose A ColdFusion Component to manage authentication using the OAuth2 protocol.
 **/
-component accessors="true" 
-{
+component accessors="true" {
+	
 	/**
 	* @getter true
 	* @setter true
@@ -34,7 +34,7 @@ component accessors="true"
 	* @type string
 	* @validate string
 	* @validateParams { minLength=1 }
-	* @hint The URL endpoint that handles the authorisation.
+	* @hint The URL endpoint that handles the authorization.
 	**/
 	property name="authEndpoint";
 	
@@ -58,6 +58,14 @@ component accessors="true"
 	**/
 	property name="redirect_uri";
 
+	/**
+	* @getter true
+	* @setter true
+	* @type string
+	* @validate string
+	* @hint If 'code' indicates that your server expects to receive an authorization code.
+	**/
+	property name="response_type";
 
 	/**
 	* @hint I return an initialized instance.
@@ -68,14 +76,18 @@ component accessors="true"
 		required string client_secret, 
 		required string authEndpoint, 
 		required string accessTokenEndpoint, 
-		required string redirect_uri
-	)
-	{
+		required string redirect_uri,
+		string response_type) {
+
+		param name="arguments.response_type" type="string" default="code";
+
 		setClient_id(arguments.client_id);
 		setClient_secret(arguments.client_secret);
 		setAuthEndpoint(arguments.authEndpoint);
 		setAccessTokenEndpoint(arguments.accessTokenEndpoint);
 		setRedirect_uri(arguments.redirect_uri);
+		setResponse_type(arguments.response_type);
+		
 		return this;
 	}
 	
@@ -85,7 +97,7 @@ component accessors="true"
 	* @parameters A structure containing key / value pairs of data to be included in the URL string.
 	**/
 	public string function buildRedirectToAuthURL( struct parameters={} ) {
-		return getAuthEndpoint() & '?client_id=' & getClient_id() & '&redirect_uri=' & getRedirect_uri() & buildParamString(argScope = arguments.parameters);
+		return getAuthEndpoint() & '?client_id=' & getClient_id() & '&response_type=' & getResponse_type() & '&redirect_uri=' & getRedirect_uri() & buildParamString(argScope = arguments.parameters);
 	}
 	
 	/**
@@ -94,24 +106,29 @@ component accessors="true"
 	* @code The code returned from the authentication request.
 	**/
 	public struct function makeAccessTokenRequest( required string code ) {
-		var stuResponse = {};
-		    httpService = new http(); 
-		    httpService.setMethod("post"); 
-		    httpService.setCharset("utf-8"); 
-		    httpService.setUrl(getAccessTokenEndpoint());
-		    httpService.addParam(type="formfield", name="client_id", 	 value="#getClient_id()#");
-		    httpService.addParam(type="formfield", name="client_secret", value="#getClient_secret()#");
-		    httpService.addParam(type="formfield", name="code", 		 value="#arguments.code#");
-		    httpService.addParam(type="formfield", name="redirect_uri",  value="#getRedirect_uri()#");
-		    result = httpService.send().getPrefix();
-		    if('200' == result.ResponseHeader['Status_Code']) {
-		    	stuResponse.success = true;
-		    	stuResponse.content = result.FileContent;
-		    } else {
-		    	stuResponse.success = false;
-		    	stuResponse.content = result.Statuscode;
-		    }
-	    return stuResponse;
+		var stResponse = {};
+			httpService = new http(); 
+			httpService.setMethod("post"); 
+			httpService.setCharset("utf-8"); 
+			httpService.setUrl(getAccessTokenEndpoint());
+			httpService.addParam(type="header", name="Authorization", value="Basic #ToBase64(getClient_id() & ":" & getClient_secret())#");
+			httpService.addParam(type="formfield", name="grant_type", value="authorization_code");
+			httpService.addParam(type="formfield", name="client_id", value="#getClient_id()#");
+			httpService.addParam(type="formfield", name="client_secret", value="#getClient_secret()#");
+			httpService.addParam(type="formfield", name="code", value="#arguments.code#");
+			httpService.addParam(type="formfield", name="redirect_uri", value="#getRedirect_uri()#");
+
+			result = httpService.send().getPrefix();
+
+			if (result.ResponseHeader['Status_Code'] == "200") {
+				stResponse.success = true;
+				stResponse.content = result.FileContent;
+			}
+			else {
+				stResponse.success = false;
+				stResponse.content = result.Statuscode;
+			}
+		return stResponse;
 	}
 	
 	/**
@@ -121,9 +138,9 @@ component accessors="true"
 	**/
 	public string function buildParamString( struct argScope={} ) {
 		var strURLParam = '';
-			if(structCount(arguments.argScope)) {
+			if (structCount(arguments.argScope)) {
 				for (key in arguments.argScope) {
-					if(listLen(strURLParam)) {
+					if (listLen(strURLParam)) {
 						strURLParam = strURLParam & '&';
 					}
 					strURLParam = strURLParam & lcase(key) & '=' & trim(arguments.argScope[key]);
