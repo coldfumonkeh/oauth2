@@ -19,7 +19,7 @@ Download
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
     
 
-### 1.0.0 - June 03, 2012###
+### 1.0.01 - July 27, 2017###
  
 - Commit: Initial Release
 
