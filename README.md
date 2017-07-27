@@ -79,7 +79,7 @@ var strURL = oLinkedIn.buildRedirectToAuthURL(
 #### Instantiation
 
 ```
-var oGoogle = new providers.linkedIn(
+var oGoogle = new providers.google(
 	client_id           = '1234567890',
 	client_secret       = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX',
 	redirect_uri        = 'http://redirect.fake'
@@ -88,7 +88,7 @@ var oGoogle = new providers.linkedIn(
 
 #### Authorization
 
-Google 'recommend' that you send more properties through for the authorization endpoint request. As a result, anything they have recommended I've set to required, which are:
+Google **recommend** that you send more properties through for the authorization endpoint request. As a result, anything they have recommended I've set to required, which are:
 
 * `scope`
 * `access_type` ( defaults to `online` )
