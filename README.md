@@ -40,6 +40,7 @@ These are:
 * dropbox
 * github
 * google
+* instagram
 * linkedin
 
 The provider components extend the core component to help lighten the load. They simply help to provide correct OAuth2 access to the provider in question as some have different requirements for parameters to send through.
