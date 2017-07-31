@@ -138,7 +138,14 @@ Download
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
 
 
-### 1.1.0 - July 26, 2017###
+### 1.2.0 - July 31, 2017
+
+- Created three new provider components
+  - Bitbucket
+  - Dropbox
+  - Instagram
+
+### 1.1.0 - July 26, 2017
 
 - Updated core oauth2 component
   - streamlined functions
@@ -148,7 +155,7 @@ Download
   - LinkedIn
   - Google
 
-### 1.0.0 - June 03, 2012###
+### 1.0.0 - June 03, 2012
 
 - Commit: Initial Release
 
