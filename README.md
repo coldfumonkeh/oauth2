@@ -140,9 +140,10 @@ Download
 
 ### 1.2.0 - July 31, 2017
 
-- Created three new provider components
+- Created four new provider components
   - Bitbucket
   - Dropbox
+  - Github
   - Instagram
 
 ### 1.1.0 - July 26, 2017
