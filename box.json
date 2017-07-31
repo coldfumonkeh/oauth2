@@ -1,7 +1,30 @@
 {
-    "name":"oauth2",
+    "name":"OAuth2 Providers",
+    "slug":"oauth2-providers",
     "version":"0.0.0",
     "author":"Matt Gifford (https://www.monkehworks.com)",
+    "location":"coldfumonkeh/oauth2#v1.2.0",
+    "directory":"",
+    "createPackageDirectory":"true",
+    "homepage":"https://github.com/coldfumonkeh/oauth2",
+    "documentation":"https://github.com/coldfumonkeh/oauth2",
+    "type":"projects",
+    "repository":{
+        "type":"git",
+        "URL":"https://github.com/coldfumonkeh/oauth2.git"
+    },
+    "bugs":"https://github.com/coldfumonkeh/oauth2/issues",
+    "shortDescription":"A ColdFusion wrapper to interact with OAuth2 provider",
+    "keywords":[
+        "oauth2",
+        "api"
+    ],
+    "scripts":{
+        "postVersion":"package set location='coldfumonkeh/oauth2#v`package version`'",
+        "onRelease":"publish",
+        "postPublish":"!git push --follow-tags"
+    },
+    "private":"false",
     "ignore":[
         "**/.*",
         "test",
