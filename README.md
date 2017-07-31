@@ -139,7 +139,7 @@ Download
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
 
 
-### 1.2.0 - July 31, 2017
+### 1.1.2 - July 31, 2017
 
 - Created four new provider components
   - Bitbucket
