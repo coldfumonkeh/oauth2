@@ -48,7 +48,7 @@ Instantiation for the provider components is the same as the core, although you 
 
 ### Adding to the providers
 
-You can easily create your own additional providers. If you do, please make a pull request to add them back into the main repository for others to benefit).
+You can easily create your own additional providers. If you do, please make a pull request to add them back into the main repository for others to benefit.
 
 To do so, take a look at one of the existing provider components. These extend the core, and will always need their own `init`, `buildRedirectToAuthURL` and `makeAccessTokenRequest` methods to make sure the correct required values are sent through to the providers API.
 
