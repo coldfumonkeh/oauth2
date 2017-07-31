@@ -46,6 +46,14 @@ The provider components extend the core component to help lighten the load. They
 
 Instantiation for the provider components is the same as the core, although you don't have to send through the `authEndpoint` and `accessTokenEndpoint` values as they are included in the provider components for you.
 
+### Adding to the providers
+
+You can easily create your own additional providers. If you do, please make a pull request to add them back into the main repository for others to benefit).
+
+To do so, take a look at one of the existing provider components. These extend the core, and will always need their own `init`, `buildRedirectToAuthURL` and `makeAccessTokenRequest` methods to make sure the correct required values are sent through to the providers API.
+
+
+
 ### LinkedIn
 
 #### Instantiation
