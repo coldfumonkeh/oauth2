@@ -32,7 +32,15 @@ var sData = oOauth2.makeAccessTokenRequest( code = url.code );
 
 ## Providers
 
-Two providers have been created for you, more will come.
+Some initial providers have been created for you, more will come.
+
+These are:
+
+* bitbucket
+* dropbox
+* github
+* google
+* linkedin
 
 The provider components extend the core component to help lighten the load. They simply help to provide correct OAuth2 access to the provider in question as some have different requirements for parameters to send through.
 
