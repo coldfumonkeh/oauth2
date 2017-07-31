@@ -1,9 +1,9 @@
 {
     "name":"OAuth2 Providers",
     "slug":"oauth2-providers",
-    "version":"minor",
+    "version":"1.0.1",
     "author":"Matt Gifford (https://www.monkehworks.com)",
-    "location":"coldfumonkeh/oauth2#vminor",
+    "location":"coldfumonkeh/oauth2#v1.0.1",
     "directory":"",
     "createPackageDirectory":"true",
     "homepage":"https://github.com/coldfumonkeh/oauth2",
