@@ -40,6 +40,7 @@ These are:
 * bitly
 * dropbox
 * github
+* gitlab
 * google
 * instagram
 * linkedin
