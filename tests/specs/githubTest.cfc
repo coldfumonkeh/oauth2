@@ -6,9 +6,20 @@ component extends='testbox.system.BaseSpec'{
 
 		describe( 'Github Component Suite', function(){
 			
-			var clientId            = '1234567890';
-			var clientSecret        = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX';
-			var redirect_uri        = 'http://redirect.fake';
+			variables.thisProvider = 'github';
+			variables.sProviderData = {};
+
+			include 'providerData.properties.cfm';
+
+			if( structKeyExists( variables.providerInfo, variables.thisProvider ) ){
+				variables.sProviderData = variables.providerInfo[ variables.thisProvider ];
+			} else {
+				variables.sProviderData = variables.providerInfo[ 'default' ];
+			}
+
+			var clientId     = variables.sProviderData[ 'clientId' ];
+			var clientSecret = variables.sProviderData[ 'clientSecret' ];
+			var redirect_uri = variables.sProviderData[ 'redirect_uri' ];
 
 			var oGithub = new providers.github(
 				client_id           = clientId,

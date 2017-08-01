@@ -37,6 +37,7 @@ Some initial providers have been created for you, more will come.
 These are:
 
 * bitbucket
+* bitly
 * dropbox
 * github
 * google
@@ -138,6 +139,12 @@ Download
 ----------------
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
 
+
+### 1.1.3 - August 1, 2017
+
+- Created new provider components
+  - Bitly
+  - Gitlab
 
 ### 1.1.2 - July 31, 2017
 
