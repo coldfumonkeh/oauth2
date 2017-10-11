@@ -46,6 +46,7 @@ These are:
 * bitly
 * dropbox
 * facebook
+* freshbooks
 * github
 * gitlab
 * google
@@ -149,6 +150,11 @@ Download
 ----------------
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
 
+
+### 1.1.6 - October 11, 2017
+
+- Created one new provider component
+  - Freshbooks
 
 ### 1.1.5 - October 11, 2017
 
