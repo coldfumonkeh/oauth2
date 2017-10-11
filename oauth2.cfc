@@ -28,8 +28,7 @@ component accessors="true"{
 		required string authEndpoint, 
 		required string accessTokenEndpoint, 
 		required string redirect_uri
-	)
-	{
+	){
 		setClient_id( arguments.client_id );
 		setClient_secret( arguments.client_secret );
 		setAuthEndpoint( arguments.authEndpoint );
@@ -51,16 +50,23 @@ component accessors="true"{
 	* I make the HTTP request to obtain the access token.
 	* @code The code returned from the authentication request.
 	* @formfields An optional array of structs for the provider requirements to add new form fields.
+	* @headers An optional array of structs to add custom headers to the request if required.
 	**/
 	public struct function makeAccessTokenRequest(
 		required string code,
-		array formfields = []
-	) {
+		array formfields = [],
+		array headers    = []
+	){
 		var stuResponse = {};
-	    var httpService = new http(); 
+	    var httpService = new http();
 	    httpService.setMethod( "post" ); 
-	    httpService.setCharset( "utf-8" ); 
+	    httpService.setCharset( "utf-8" );
 	    httpService.setUrl( getAccessTokenEndpoint());
+	    if( arrayLen( arguments.headers ) ){
+	    	for( var item in arguments.headers ){
+	    		httpService.addParam( type="header", name=item[ 'name' ],  value=item[ 'value' ] );
+	    	}
+	    }
 	    httpService.addParam( type="formfield", name="client_id", 	 value=getClient_id() );
 	    httpService.addParam( type="formfield", name="client_secret", value=getClient_secret() );
 	    httpService.addParam( type="formfield", name="code", 		 value=arguments.code );
