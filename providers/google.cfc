@@ -52,10 +52,10 @@ Set the parameter value to an email address or sub identifier.
 		string prompt
 	){
 		var sParams = {
-			'response_type' = 'code',
-			'scope'         = arrayToList( arguments.scope, ' ' ),
-			'access_type' = arguments.access_type,
-			'state'         = arguments.state,
+			'response_type'          = 'code',
+			'scope'                  = arrayToList( arguments.scope, ' ' ),
+			'access_type'            = arguments.access_type,
+			'state'                  = arguments.state,
 			'include_granted_scopes' = arguments.include_granted_scopes
 		};
 		if( len( arguments.login_hint ) ){

@@ -45,11 +45,13 @@ These are:
 * bitbucket
 * bitly
 * dropbox
+* facebook
 * github
 * gitlab
 * google
 * instagram
 * linkedin
+* microsoft
 * slack
 
 The provider components extend the core component to help lighten the load. They simply help to provide correct OAuth2 access to the provider in question as some have different requirements for parameters to send through.
@@ -147,6 +149,12 @@ Download
 ----------------
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
 
+
+### 1.1.5 - October 11, 2017
+
+- Created two new provider components
+  - Facebook
+  - Microsoft
 
 ### 1.1.4 - October 4, 2017
 
