@@ -55,6 +55,7 @@ These are:
 * microsoft
 * slack
 * spotify
+* strava
 
 The provider components extend the core component to help lighten the load. They simply help to provide correct OAuth2 access to the provider in question as some have different requirements for parameters to send through.
 
@@ -151,6 +152,11 @@ Download
 ----------------
 [OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
 
+
+### 1.1.8 - October 12, 2017
+
+- Created one new provider component
+  - Strava
 
 ### 1.1.7 - October 12, 2017
 
