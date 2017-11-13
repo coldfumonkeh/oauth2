@@ -46,6 +46,7 @@ These are:
 * bitly
 * dropbox
 * facebook
+* freeagent
 * freshbooks
 * github
 * gitlab
@@ -150,8 +151,13 @@ The component has been tested on Adobe ColdFusion 9 and 10 and Lucee 4.5.
 
 Download
 ----------------
-[OAuth2 CFC ](https://github.com/coldfumonkeh/oauth2/downloads)
+[OAuth2 CFC](https://github.com/coldfumonkeh/oauth2/downloads)
 
+
+### 1.1.9 - November 13, 2017
+
+- Created one new provider component
+  - Freeagent
 
 ### 1.1.8 - October 12, 2017
 

@@ -61,7 +61,7 @@ component accessors="true"{
 	    var httpService = new http();
 	    httpService.setMethod( "post" ); 
 	    httpService.setCharset( "utf-8" );
-	    httpService.setUrl( getAccessTokenEndpoint());
+	    httpService.setUrl( getAccessTokenEndpoint() );
 	    if( arrayLen( arguments.headers ) ){
 	    	for( var item in arguments.headers ){
 	    		httpService.addParam( type="header", name=item[ 'name' ],  value=item[ 'value' ] );
