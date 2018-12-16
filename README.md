@@ -54,6 +54,7 @@ These are:
 * instagram
 * linkedin
 * microsoft
+* monzo
 * slack
 * spotify
 * strava
