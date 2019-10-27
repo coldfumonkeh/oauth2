@@ -10,7 +10,7 @@ A ColdFusion CFC to manage authentication using the OAuth2 protocol.
 
 ## Base Component
 
-The core component, `oauth2.cfc`, can be used as a standalone OAuth2 tool for most providers.
+The core component `oauth2.cfc` can be used as a standalone OAuth2 tool for most providers.
 
 Instantiate the component and pass in the required properties like so:
 
@@ -56,8 +56,10 @@ These are:
 * microsoft
 * monzo
 * slack
+* soundcloud
 * spotify
 * strava
+* streamlabs
 
 The provider components extend the core component to help lighten the load. They simply help to provide correct OAuth2 access to the provider in question as some have different requirements for parameters to send through.
 
@@ -76,7 +78,7 @@ To do so, take a look at one of the existing provider components. These extend t
 #### Instantiation
 
 ```
-var oLinkedIn = new providers.linkedIn(
+var oLinkedIn = new linkedIn(
 	client_id           = '1234567890',
 	client_secret       = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX',
 	redirect_uri        = 'http://redirect.fake'
@@ -112,7 +114,7 @@ var strURL = oLinkedIn.buildRedirectToAuthURL(
 #### Instantiation
 
 ```
-var oGoogle = new providers.google(
+var oGoogle = new google(
 	client_id           = '1234567890',
 	client_secret       = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX',
 	redirect_uri        = 'http://redirect.fake'

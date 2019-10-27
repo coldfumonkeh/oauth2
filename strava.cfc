@@ -9,12 +9,14 @@ component extends="oauth2" accessors="true" {
 	/**
 	* I return an initialized strava object instance.
 	* @client_id The client ID for your application.
+	* @client_secret The client secret for your application.
 	* @authEndpoint The URL endpoint that handles the authorisation.
 	* @accessTokenEndpoint The URL endpoint that handles retrieving the access token.
 	* @redirect_uri The URL to redirect the user back to following authentication.
 	**/
 	public strava function init(
 		required string client_id,
+		required string client_secret,
 		required string authEndpoint        = 'https://www.strava.com/oauth/authorize', 
 		required string accessTokenEndpoint = 'https://www.strava.com/oauth/token',
 		required string redirect_uri

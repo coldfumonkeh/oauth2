@@ -3,7 +3,7 @@
 * @output false
 * @hint The oauth2 object.
 * @author Matt Gifford
-* @website http://www.mattgifford.co.uk/
+* @website https://www.monkehworks.com
 * @purpose A ColdFusion Component to manage authentication using the OAuth2 protocol.
 **/
 component accessors="true"{

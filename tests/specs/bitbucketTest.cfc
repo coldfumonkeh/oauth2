@@ -21,7 +21,7 @@ component extends='testbox.system.BaseSpec'{
 			var clientSecret = variables.sProviderData[ 'clientSecret' ];
 			var redirect_uri = variables.sProviderData[ 'redirect_uri' ];
 
-			var oBitbucket = new providers.bitbucket(
+			var oBitbucket = new bitbucket(
 				client_id           = clientId,
 				client_secret       = clientSecret,
 				redirect_uri        = redirect_uri

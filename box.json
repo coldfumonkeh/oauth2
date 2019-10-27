@@ -30,39 +30,10 @@
         "test",
         "tests"
     ],
-    "testbox":{
-        "runner":[
-            {
-                "default":""
-            }
-        ],
-        "labels":[
-            
-        ],
-        "reporter":"",
-        "reporterResults":"",
-        "bundles":[
-            ""
-        ],
-        "directory":{
-            "mapping":"",
-            "recurse":true
-        },
-        "watchers":[
-            
-        ],
-        "notify":{
-            "emails":[
-                
-            ],
-            "growl":"",
-            "URL":""
-        }
-    },
     "dependencies":{
         "testbox":"^2.5.0+107"
     },
     "installPaths":{
-        "testbox":"testbox"
+        "testbox":"testbox/"
     }
 }
