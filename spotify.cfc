@@ -40,7 +40,7 @@ component extends="oauth2" accessors="true" {
 	**/
 	public string function buildRedirectToAuthURL(
 		required string state,
-		array scope,
+		array scope = [],
 		boolean show_dialog = false
 	){
 		var sParams = {
