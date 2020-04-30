@@ -37,10 +37,11 @@ component extends="oauth2" accessors="true" {
 	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
 	**/
 	public string function buildRedirectToAuthURL(
-
+		required string state
 	){
 		var sParams = {
-			'response_type' = 'code'
+			'response_type' = 'code',
+			'state'         = arguments.state
 		};
 		return super.buildRedirectToAuthURL( sParams );
 	}
@@ -70,46 +71,6 @@ component extends="oauth2" accessors="true" {
 			formfields = aFormFields,
 			headers    = aHeaders
 		);
-	}
-
-	/**
-	* I make the HTTP request to refresh the access token.
-	* @refresh_token The refresh_token returned from the accessTokenRequest request.
-	**/
-	public struct function refreshAccessTokenRequest(
-		required string refresh_token,
-		array formfields = [],
-		array headers    = []
-	){
-		var stuResponse = {};
-	    var httpService = new http();
-	    httpService.setMethod( "post" ); 
-	    httpService.setCharset( "utf-8" );
-	    httpService.setUrl( getAccessTokenEndpoint() );
-	    httpService.addParam( type="header", name="Content-Type", value="application/x-www-form-urlencoded" );
-	    if( arrayLen( arguments.headers ) ){
-	    	for( var item in arguments.headers ){
-	    		httpService.addParam( type="header", name=item[ 'name' ],  value=item[ 'value' ] );
-	    	}
-	    }
-	    httpService.addParam( type="formfield", name="client_id", 	 value=getClient_id() );
-	    httpService.addParam( type="formfield", name="client_secret", value=getClient_secret() );
-	    httpService.addParam( type="formfield", name="refresh_token", value=arguments.refresh_token );
-	    httpService.addParam( type="formfield", name="grant_type",  value="refresh_token" );
-	    if( arrayLen( arguments.formfields ) ){
-	    	for( var item in arguments.formfields ){
-	    		httpService.addParam( type="formfield", name=item[ 'name' ],  value=item[ 'value' ] );
-	    	}
-	    }
-	    var result = httpService.send().getPrefix();
-	    if( '200' == result.ResponseHeader[ 'Status_Code' ] ) {
-	    	stuResponse.success = true;
-	    	stuResponse.content = result.FileContent;
-	    } else {
-	    	stuResponse.success = false;
-	    	stuResponse.content = result.Statuscode;
-	    }
-    	return stuResponse;
 	}
 
 }
