@@ -18,7 +18,7 @@ component extends="oauth2" accessors="true" {
 		required string client_id, 
 		required string client_secret, 
 		required string authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth', 
-		required string accessTokenEndpoint = 'https://www.googleapis.com//oauth2/v4/token',
+		required string accessTokenEndpoint = 'https://www.googleapis.com/oauth2/v4/token',
 		required string redirect_uri
 	)
 	{
