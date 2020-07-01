@@ -12,6 +12,7 @@ stages:
     steps:
     - bash: |
       which bash
+    - bash: |
       echo Testing on Lucee 4!
   - job: Lucee5
     container:
