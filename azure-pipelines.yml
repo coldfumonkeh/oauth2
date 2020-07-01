@@ -20,16 +20,18 @@ trigger:
 
 
 # image: ortussolutions/commandbox:lucee5-alpine
-pool:
-  vmImage: ortussolutions/commandbox
 
 stages:
 - stage: Test
   jobs:
   - job: Lucee4
+    container:
+      image: ortussolutions/commandbox
     steps:
     - script: echo Testing on Windows!
   - job: Lucee5
+    container:
+      image: ortussolutions/commandbox
     steps:
     - script: echo Testing on Linux!
 - stage: Deploy
