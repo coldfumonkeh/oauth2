@@ -78,8 +78,8 @@ component extends='testbox.system.BaseSpec'{
 				expect( strURL ).toBe(
 					oFacebook.getAuthEndpoint() & '?client_id=' & clientId 
 					& '&redirect_uri=' & oFacebook.getRedirect_URI()
-					& '&state=' & strState
 					& '&scope=public_profile email'
+					& '&state=' & strState
 					& '&response_type=code'
 				);
 

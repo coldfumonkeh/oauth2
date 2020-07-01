@@ -77,8 +77,8 @@ component extends='testbox.system.BaseSpec'{
 				expect( strURL ).toBe(
 					oStrava.getAuthEndpoint() & '?client_id=' & clientId 
 					& '&redirect_uri=' & oStrava.getRedirect_URI()
-					& '&state=' & strState
 					& '&scope=write'
+					& '&state=' & strState
 					& '&response_type=code'
 				);
 

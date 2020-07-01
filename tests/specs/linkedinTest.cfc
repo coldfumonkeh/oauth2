@@ -72,7 +72,7 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strParams ).toBeString();
-				expect( strParams ).toBe( '&two=two&one=one' );
+				expect( strParams ).toBe( '&one=one&two=two' );
 
 			} );
 
@@ -101,7 +101,13 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe( oLinkedIn.getAuthEndpoint() & '?client_id=' & clientId & '&redirect_uri=' & oLinkedIn.getRedirect_uri() & '&state=' & strState & '&scope=r_fullprofile&r_emailaddress&w_share&response_type=code' );
+				expect( strURL ).toBe( 
+					oLinkedIn.getAuthEndpoint() & '?client_id=' & clientId 
+					& '&redirect_uri=' & oLinkedIn.getRedirect_uri()
+					& '&scope=r_fullprofile&r_emailaddress&w_share'
+					& '&state=' & strState 
+					& '&response_type=code'
+				);
 
 			} );
 

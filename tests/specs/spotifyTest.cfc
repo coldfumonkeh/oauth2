@@ -78,10 +78,10 @@ component extends='testbox.system.BaseSpec'{
 				expect( strURL ).toBe(
 					oSpotify.getAuthEndpoint() & '?client_id=' & clientId 
 					& '&redirect_uri=' & oSpotify.getRedirect_URI()
-					& '&state=' & strState
-					& '&scope=playlist-read-private user-library-read'
-					& '&response_type=code'
 					& '&show_dialog=false'
+					& '&scope=playlist-read-private user-library-read'
+					& '&state=' & strState
+					& '&response_type=code'
 				);
 
 			} );

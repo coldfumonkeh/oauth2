@@ -67,7 +67,7 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strParams ).toBeString();
-				expect( strParams ).toBe( '&two=two&one=one' );
+				expect( strParams ).toBe( '&one=one&two=two' );
 
 			} );
 
@@ -76,7 +76,10 @@ component extends='testbox.system.BaseSpec'{
 				var strURL = oOauth2.buildRedirectToAuthURL();
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe( authEndpoint & '?client_id=' & clientId & '&redirect_uri=' & redirect_uri );
+				expect( strURL ).toBe( 
+					authEndpoint & '?client_id=' & clientId 
+					& '&redirect_uri=' & redirect_uri
+				);
 
 				// Now with params sent through
 				var strURL = oOauth2.buildRedirectToAuthURL(

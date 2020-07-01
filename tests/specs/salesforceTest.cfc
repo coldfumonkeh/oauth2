@@ -72,7 +72,7 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strParams ).toBeString();
-				expect( strParams ).toBe( '&two=two&one=one' );
+				expect( strParams ).toBe( '&one=one&two=two' );
 
 			} );
 
@@ -100,7 +100,13 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe( oSalesForce.getAuthEndpoint() & '?client_id=' & clientId & '&redirect_uri=' & oSalesForce.getRedirect_uri() & '&state=' & strState & '&scope=api refresh_token&response_type=code' );
+				expect( strURL ).toBe( 
+					oSalesForce.getAuthEndpoint() & '?client_id=' & clientId 
+					& '&redirect_uri=' & oSalesForce.getRedirect_uri() 
+					& '&scope=api refresh_token'
+					& '&state=' & strState 
+					& '&response_type=code'
+				);
 
 			} );
 

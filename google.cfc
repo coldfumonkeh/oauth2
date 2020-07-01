@@ -48,8 +48,8 @@ Set the parameter value to an email address or sub identifier.
 		required string access_type = 'online',
 		required string state,
 		boolean include_granted_scopes = true,
-		string login_hint,
-		string prompt
+		string login_hint              = '',
+		string prompt                  = ''
 	){
 		var sParams = {
 			'response_type'          = 'code',

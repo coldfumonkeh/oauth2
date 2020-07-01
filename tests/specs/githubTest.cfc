@@ -79,8 +79,8 @@ component extends='testbox.system.BaseSpec'{
 					oGithub.getAuthEndpoint() & '?client_id=' & clientId 
 					& '&redirect_uri=' & oGithub.getRedirect_URI()
 					& '&allow_signup=true'
-					& '&state=' & strState
 					& '&scope=repo user'
+					& '&state=' & strState
 				);
 
 			} );

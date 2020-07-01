@@ -74,10 +74,10 @@ component extends='testbox.system.BaseSpec'{
 				expect( strURL ).toBe(
 					oDropbox.getAuthEndpoint() & '?client_id=' & clientId 
 					& '&redirect_uri=' & oDropbox.getRedirect_URI()
-					& '&force_reauthentication=false'
 					& '&disable_signup=false'
-					& '&force_reapprove=false'
+					& '&force_reauthentication=false'
 					& '&state=' & strState
+					& '&force_reapprove=false'
 					& '&response_type=code'
 				);
 

@@ -78,9 +78,9 @@ component extends='testbox.system.BaseSpec'{
 				expect( strURL ).toBe(
 					oGoogle.getAuthEndpoint() & '?client_id=' & clientId 
 					& '&redirect_uri=' & oGoogle.getRedirect_URI()
+					& '&scope=https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/analytics.readonly'
 					& '&access_type=online'
 					& '&state=' & strState
-					& '&scope=https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/analytics.readonly'
 					& '&response_type=code'
 					& '&include_granted_scopes=true'
 				);
