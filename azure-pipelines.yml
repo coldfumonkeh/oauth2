@@ -24,9 +24,16 @@ pool:
   vmImage: ortussolutions/commandbox
 
 stages:
-- stage: Make it testable and clean
+- stage: Test
   jobs:
-  - job: Linting
+  - job: Lucee4
     steps:
-      script:
-        - echo 'hello'
+    - script: echo Testing on Windows!
+  - job: Lucee5
+    steps:
+    - script: echo Testing on Linux!
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    steps:
+    - script: echo Deploying the code!
