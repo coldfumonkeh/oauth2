@@ -1,0 +1,63 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+#pool:
+#  vmImage: 'ubuntu-latest'
+
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+
+
+# image: ortussolutions/commandbox:lucee5-alpine
+pool:
+  vmImage: ortussolutions/commandbox
+
+pipelines:
+  default:
+    - step:
+        name: lint
+        script:
+          - box install commandbox-cflint
+          - box cflint pattern="**.cf*" reportLevel=WARNING
+    #- step:
+    #    name: Fixinator
+    #    script:
+    #      - box install fixinator
+    #      - box fixinator path=/ --failOnIssues=true severity=low confidence=low
+    - step:
+        name: Lucee 4 Test
+        script:
+          - box install production=false
+          - box server start cfengine=lucee@4
+          - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
+    - step:
+        name: Lucee 5 Test
+        script:
+          - box install production=false
+          - box server start cfengine=lucee@5
+          - box testbox run outputFile=./test-reports/junit-lucee-5.xml reporter=junit
+          
+    - step:
+        name: Adobe 2016 Test
+        script:
+          - box install production=false
+          - box server start cfengine=adobe@2016
+          - box testbox run outputFile=./test-reports/junit-adobe-2016.xml reporter=junit
+          
+    - step:
+        name: Adobe 2018 Test
+        script:
+          - box install production=false
+          - box server start cfengine=adobe@2018
+          - box testbox run outputFile=./test-reports/junit-adobe-2018.xml reporter=junit
