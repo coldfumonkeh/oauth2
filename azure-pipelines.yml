@@ -1,23 +1,5 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
-
-#pool:
-#  vmImage: 'ubuntu-latest'
-
-#steps:
-#- script: echo Hello, world!
-#  displayName: 'Run a one-line script'
-
-#- script: |
-#    echo Add other tasks to build, test, and deploy your project.
-#    echo See https://aka.ms/yaml
-#  displayName: 'Run a multi-line script'
-
 
 # image: ortussolutions/commandbox:lucee5-alpine
 
@@ -28,7 +10,10 @@ stages:
     container:
       image: ortussolutions/commandbox
     steps:
-    - script: echo Testing on Windows!
+    - script: echo Testing on Lucee 4!
+    - script: box install production=false
+    - script: box server start cfengine=lucee@4
+    - script: box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
   - job: Lucee5
     container:
       image: ortussolutions/commandbox
