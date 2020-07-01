@@ -2,10 +2,9 @@ language: java
 
 branches:
   only:
-  - master
+    - master
 
-sudo: required
-
+os: linux
 dist: trusty
 
 cache:
