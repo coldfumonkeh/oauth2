@@ -23,14 +23,20 @@ trigger:
 pool:
   vmImage: ortussolutions/commandbox
 
-steps:
-  displayName: 'Lint'
-  script:
-    - box install commandbox-cflint
-    - box cflint pattern="**.cf*" reportLevel=WARNING
+stages:
+- stage: Make it testable and clean
+  jobs:
+  - job: Linting
+    steps:
+      displayName: 'Lint'
+      script:
+        - box install commandbox-cflint
+        - box cflint pattern="**.cf*" reportLevel=WARNING
 
-  displayName: Lucee 4 Test
-  script:
-    - box install production=false
-    - box server start cfengine=lucee@4
-    - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
+  - job: Testing
+    steps:
+      displayName: 'Lucee 4 Test'
+      script:
+        - box install production=false
+        - box server start cfengine=lucee@4
+        - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
