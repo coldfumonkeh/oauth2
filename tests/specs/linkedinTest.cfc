@@ -72,7 +72,7 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strParams ).toBeString();
-				expect( strParams ).toBe( '&one=one&two=two' );
+				expect( strParams ).toBe( '&two=two&one=one' );
 
 			} );
 
