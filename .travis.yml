@@ -28,7 +28,7 @@ jobs:
         - box server start cfengine=lucee@4
         - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
 
-  - stage: Lucee 5 Test
+    - stage: Lucee 5 Test
       script:
         - box server start cfengine=lucee@5
         - box testbox run outputFile=./test-reports/junit-lucee-5.xml reporter=junit
