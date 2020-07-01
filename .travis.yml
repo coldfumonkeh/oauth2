@@ -19,19 +19,17 @@ before_install:
 
 install:
   - sudo apt-get update && sudo apt-get --assume-yes install commandbox
-  - box install
+  - box install production=false
 
 jobs:
 
   include:
     - stage: Lucee 4 Test
       script:
-        - box install production=false
         - box server start cfengine=lucee@4
         - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
 
-before_script:
-  - box server start
-
-script: 
-  - box testbox run
+  - stage: Lucee 5 Test
+      script:
+        - box server start cfengine=lucee@5
+        - box testbox run outputFile=./test-reports/junit-lucee-5.xml reporter=junit
