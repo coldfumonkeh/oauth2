@@ -29,12 +29,4 @@ stages:
   - job: Linting
     steps:
       script:
-        - box install commandbox-cflint
-        - box cflint pattern="**.cf*" reportLevel=WARNING
-
-  - job: Lucee 4 Testing
-    steps:
-      script:
-        - box install production=false
-        - box server start cfengine=lucee@4
-        - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
+        - echo 'hello'
