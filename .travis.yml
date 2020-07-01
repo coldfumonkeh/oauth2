@@ -1,0 +1,37 @@
+language: java
+
+branches:
+  only:
+  - master
+
+sudo: required
+
+dist: trusty
+
+cache:
+  timeout: 180
+  directories:
+    - $HOME/.CommandBox
+
+before_install:
+  - sudo apt-key adv --keyserver keys.gnupg.net --recv 6DA70622
+  - sudo echo "deb http://downloads.ortussolutions.com/debs/noarch /" | sudo tee -a /etc/apt/sources.list.d/commandbox.list
+
+install:
+  - sudo apt-get update && sudo apt-get --assume-yes install commandbox
+  - box install
+
+jobs:
+
+  include:
+    - stage: Lucee 4 Test
+      script:
+        - box install production=false
+        - box server start cfengine=lucee@4
+        - box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
+
+before_script:
+  - box server start
+
+script: 
+  - box testbox run
