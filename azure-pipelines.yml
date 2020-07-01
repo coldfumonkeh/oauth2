@@ -11,7 +11,7 @@ stages:
       image: ortussolutions/commandbox
     steps:
     - bash: |
-      which bash
+      which bash;
   - job: Lucee5
     container:
       image: ortussolutions/commandbox
