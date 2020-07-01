@@ -10,10 +10,13 @@ stages:
     container:
       image: ortussolutions/commandbox
     steps:
-    - script: echo Testing on Lucee 4!
-    - script: box install production=false
-    - script: box server start cfengine=lucee@4
-    - script: box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
+
+    - bash: |
+      which bash
+      echo echo Testing on Lucee 4!
+      box install production=false
+      box server start cfengine=lucee@4
+      box testbox run outputFile=./test-reports/junit-lucee-4.xml reporter=junit
   - job: Lucee5
     container:
       image: ortussolutions/commandbox
