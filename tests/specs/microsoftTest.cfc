@@ -82,13 +82,13 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
+			// it( 'should call the `makeAccessTokenRequest`', function() {
 
-				oMicrosoft.makeAccessTokenRequest(
-					code = 'M043a6be6-1529-b05e-6691-7622e3cdd10f'
-				);
+			// 	oMicrosoft.makeAccessTokenRequest(
+			// 		code = 'M043a6be6-1529-b05e-6691-7622e3cdd10f'
+			// 	);
 
-			} );
+			// } );
 
 
 		});

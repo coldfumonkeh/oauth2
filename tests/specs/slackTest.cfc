@@ -85,13 +85,13 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
+			// it( 'should call the `makeAccessTokenRequest`', function() {
 
-				oSlack.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
+			// 	oSlack.makeAccessTokenRequest(
+			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
+			// 	);
 
-			} );
+			// } );
 
 
 		});

@@ -79,13 +79,13 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
+			// it( 'should call the `makeAccessTokenRequest`', function() {
 
-				oFreshbooks.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
+			// 	oFreshbooks.makeAccessTokenRequest(
+			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
+			// 	);
 
-			} );
+			// } );
 
 
 		});

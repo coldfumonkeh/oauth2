@@ -84,13 +84,13 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
+			// it( 'should call the `makeAccessTokenRequest`', function() {
 
-				oStrava.makeAccessTokenRequest(
-					code = 'de18b29c281a8e23144126a130f2c14202187c57'
-				);
+			// 	oStrava.makeAccessTokenRequest(
+			// 		code = 'de18b29c281a8e23144126a130f2c14202187c57'
+			// 	);
 
-			} );
+			// } );
 
 
 		});

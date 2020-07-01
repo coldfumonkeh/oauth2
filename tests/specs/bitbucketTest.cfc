@@ -83,13 +83,13 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
+			// it( 'should call the `makeAccessTokenRequest`', function() {
 
-				oBitbucket.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
+			// 	oBitbucket.makeAccessTokenRequest(
+			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
+			// 	);
 
-			} );
+			// } );
 
 
 		});

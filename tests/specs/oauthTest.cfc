@@ -67,7 +67,7 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strParams ).toBeString();
-				expect( strParams ).toBe( '&two=two&one=one' );
+				expect( strParams ).toBe( '&one=one&two=two' );
 
 			} );
 
@@ -90,7 +90,9 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe( authEndpoint & '?client_id=' & clientId & '&redirect_uri=' & redirect_uri & '&two=two&one=one' );
+				expect( listToArray( strURL, '&?' ) ).toHaveLength( 5 );
+
+				// expect( strURL ).toBe( authEndpoint & '?client_id=' & clientId & '&redirect_uri=' & redirect_uri & '&two=two&one=one' );
 
 			} );
 

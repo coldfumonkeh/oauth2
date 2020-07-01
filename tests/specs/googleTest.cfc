@@ -87,13 +87,13 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
+			// it( 'should call the `makeAccessTokenRequest`', function() {
 
-				oGoogle.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
+			// 	oGoogle.makeAccessTokenRequest(
+			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
+			// 	);
 
-			} );
+			// } );
 
 
 		});
