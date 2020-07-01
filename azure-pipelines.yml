@@ -28,14 +28,12 @@ stages:
   jobs:
   - job: Linting
     steps:
-      displayName: 'Lint'
       script:
         - box install commandbox-cflint
         - box cflint pattern="**.cf*" reportLevel=WARNING
 
-  - job: Testing
+  - job: Lucee 4 Testing
     steps:
-      displayName: 'Lucee 4 Test'
       script:
         - box install production=false
         - box server start cfengine=lucee@4
