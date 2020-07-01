@@ -10,8 +10,7 @@ stages:
     container:
       image: ortussolutions/commandbox
     steps:
-    - bash: |
-      which bash;
+      - script: box install production=false
   - job: Lucee5
     container:
       image: ortussolutions/commandbox
