@@ -103,10 +103,3 @@ stages:
         /tmp/box server start cfengine=adobe@2018
         mkdir /tmp/results/
         /tmp/box testbox run outputFile=testbox-adobe18.xml reporter=junit
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/testbox-*.xml' 
-    testRunTitle: TestBox Results
-    failTaskOnFailedTests: true
-  displayName: 'TestBox Test Results'
