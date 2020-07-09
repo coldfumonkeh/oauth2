@@ -48,8 +48,58 @@ stages:
         /tmp/box server start cfengine=lucee@5
         mkdir /tmp/results/
         /tmp/box testbox run outputFile=testbox-lucee5.xml reporter=junit
-- stage: Deploy
-  jobs:
-  - job: Deploy
+  - job: Adobe9
     steps:
-    - script: echo Deploying the code!
+    - script: |
+        echo Starting the build
+        curl --location -o /tmp/box.zip https://www.ortussolutions.com/parent/download/commandbox/type/bin
+        unzip /tmp/box.zip -d /tmp/
+        chmod a+x /tmp/box
+        /tmp/box install production=false
+        /tmp/box server start cfengine=adobe@9
+        mkdir /tmp/results/
+        /tmp/box testbox run outputFile=testbox-adobe9.xml reporter=junit
+  - job: Adobe10
+    steps:
+    - script: |
+        echo Starting the build
+        curl --location -o /tmp/box.zip https://www.ortussolutions.com/parent/download/commandbox/type/bin
+        unzip /tmp/box.zip -d /tmp/
+        chmod a+x /tmp/box
+        /tmp/box install production=false
+        /tmp/box server start cfengine=adobe@10
+        mkdir /tmp/results/
+        /tmp/box testbox run outputFile=testbox-adobe10.xml reporter=junit
+  - job: Adobe11
+    steps:
+    - script: |
+        echo Starting the build
+        curl --location -o /tmp/box.zip https://www.ortussolutions.com/parent/download/commandbox/type/bin
+        unzip /tmp/box.zip -d /tmp/
+        chmod a+x /tmp/box
+        /tmp/box install production=false
+        /tmp/box server start cfengine=adobe@11
+        mkdir /tmp/results/
+        /tmp/box testbox run outputFile=testbox-adobe11.xml reporter=junit
+  - job: Adobe16
+    steps:
+    - script: |
+        echo Starting the build
+        curl --location -o /tmp/box.zip https://www.ortussolutions.com/parent/download/commandbox/type/bin
+        unzip /tmp/box.zip -d /tmp/
+        chmod a+x /tmp/box
+        /tmp/box install production=false
+        /tmp/box server start cfengine=adobe@16
+        mkdir /tmp/results/
+        /tmp/box testbox run outputFile=testbox-adobe16.xml reporter=junit
+  - job: Adobe18
+    steps:
+    - script: |
+        echo Starting the build
+        curl --location -o /tmp/box.zip https://www.ortussolutions.com/parent/download/commandbox/type/bin
+        unzip /tmp/box.zip -d /tmp/
+        chmod a+x /tmp/box
+        /tmp/box install production=false
+        /tmp/box server start cfengine=adobe@18
+        mkdir /tmp/results/
+        /tmp/box testbox run outputFile=testbox-adobe18.xml reporter=junit
