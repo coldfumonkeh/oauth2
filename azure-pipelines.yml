@@ -89,7 +89,7 @@ stages:
         unzip /tmp/box.zip -d /tmp/
         chmod a+x /tmp/box
         /tmp/box install production=false
-        /tmp/box server start cfengine=adobe@16
+        /tmp/box server start cfengine=adobe@2016
         mkdir /tmp/results/
         /tmp/box testbox run outputFile=testbox-adobe16.xml reporter=junit
   - job: Adobe18
@@ -100,6 +100,6 @@ stages:
         unzip /tmp/box.zip -d /tmp/
         chmod a+x /tmp/box
         /tmp/box install production=false
-        /tmp/box server start cfengine=adobe@18
+        /tmp/box server start cfengine=adobe@2018
         mkdir /tmp/results/
         /tmp/box testbox run outputFile=testbox-adobe18.xml reporter=junit
