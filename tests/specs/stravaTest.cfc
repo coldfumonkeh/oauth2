@@ -74,26 +74,28 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				// expect( strURL ).toBe(
-				// 	oStrava.getAuthEndpoint() & '?client_id=' & clientId 
-				// 	& '&redirect_uri=' & oStrava.getRedirect_URI()
-				// 	& '&scope=write'
-				// 	& '&state=' & strState
-				// 	& '&response_type=code'
-				// );
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 6 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oStrava.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oStrava.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'write' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			// it( 'should call the `makeAccessTokenRequest`', function() {
-
-			// 	oStrava.makeAccessTokenRequest(
-			// 		code = 'de18b29c281a8e23144126a130f2c14202187c57'
-			// 	);
-
-			// } );
-
-
-		});
+		} );
 
 	}
 	

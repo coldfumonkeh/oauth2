@@ -62,20 +62,6 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			// it( 'should return a string when calling the `buildParamString` method', function() {
-
-			// 	var strParams = oLinkedIn.buildParamString(
-			// 		argScope = {
-			// 			'one' = 'one',
-			// 			'two' = 'two'
-			// 		}
-			// 	);
-
-			// 	expect( strParams ).toBeString();
-			// 	expect( strParams ).toBe( '&one=one&two=two' );
-
-			// } );
-
 			it( 'should return a string when calling the `buildRedirectToAuthURL` method', function() {
 
 				var strState = createUUID();
@@ -101,25 +87,28 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				// expect( strURL ).toBe( 
-				// 	oLinkedIn.getAuthEndpoint() & '?client_id=' & clientId 
-				// 	& '&redirect_uri=' & oLinkedIn.getRedirect_uri()
-				// 	& '&scope=r_fullprofile&r_emailaddress&w_share'
-				// 	& '&state=' & strState 
-				// 	& '&response_type=code'
-				// );
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 6 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oLinkedIn.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oLinkedIn.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'r_fullprofile%20r_emailaddress%20w_share' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			// it( 'should call the `makeAccessTokenRequest`', function() {
-
-			// 	oLinkedIn.makeAccessTokenRequest(
-			// 		code = '1234567890'
-			// 	);
-
-			// } );
-
-		});
+		} );
 
 	}
 	

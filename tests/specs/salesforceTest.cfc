@@ -62,20 +62,6 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			// it( 'should return a string when calling the `buildParamString` method', function() {
-
-			// 	var strParams = oSalesForce.buildParamString(
-			// 		argScope = {
-			// 			'one' = 'one',
-			// 			'two' = 'two'
-			// 		}
-			// 	);
-
-			// 	expect( strParams ).toBeString();
-			// 	expect( strParams ).toBe( '&one=one&two=two' );
-
-			// } );
-
 			it( 'should return a string when calling the `buildRedirectToAuthURL` method', function() {
 
 				var strState = createUUID();
@@ -83,8 +69,6 @@ component extends='testbox.system.BaseSpec'{
 
 				expect( strURL ).toBeString();
 				expect( listToArray( strURL, '&?' ) ).toHaveLength( 5 );
-
-				// expect( strURL ).toBe( oSalesForce.getAuthEndpoint() & '?client_id=' & clientId & '&redirect_uri=' & oSalesForce.getRedirect_uri() & '&state=' & strState & '&response_type=code' );
 
 			} );
 
@@ -102,25 +86,28 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				// expect( strURL ).toBe( 
-				// 	oSalesForce.getAuthEndpoint() & '?client_id=' & clientId 
-				// 	& '&redirect_uri=' & oSalesForce.getRedirect_uri() 
-				// 	& '&scope=api refresh_token'
-				// 	& '&state=' & strState 
-				// 	& '&response_type=code'
-				// );
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 6 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oSalesForce.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSalesForce.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'api refresh_token' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			// it( 'should call the `makeAccessTokenRequest`', function() {
-
-			// 	oSalesForce.makeAccessTokenRequest(
-			// 		code = '1234567890'
-			// 	);
-
-			// } );
-
-		});
+		} );
 
 	}
 	

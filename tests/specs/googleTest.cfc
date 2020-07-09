@@ -75,28 +75,30 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				// expect( strURL ).toBe(
-				// 	oGoogle.getAuthEndpoint() & '?client_id=' & clientId 
-				// 	& '&redirect_uri=' & oGoogle.getRedirect_URI()
-				// 	& '&scope=https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/analytics.readonly'
-				// 	& '&access_type=online'
-				// 	& '&state=' & strState
-				// 	& '&response_type=code'
-				// 	& '&include_granted_scopes=true'
-				// );
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 8 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oGoogle.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oGoogle.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/analytics.readonly' );
+				expect( stuParams[ 'access_type' ] ).toBeString().toBe( 'online' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
+				expect( stuParams[ 'include_granted_scopes' ] ).toBeString().toBe( 'true' );
 
 			} );
 
-			// it( 'should call the `makeAccessTokenRequest`', function() {
-
-			// 	oGoogle.makeAccessTokenRequest(
-			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-			// 	);
-
-			// } );
-
-
-		});
+		} );
 
 	}
 	

@@ -75,26 +75,28 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				// expect( strURL ).toBe(
-				// 	oFacebook.getAuthEndpoint() & '?client_id=' & clientId 
-				// 	& '&redirect_uri=' & oFacebook.getRedirect_URI()
-				// 	& '&scope=public_profile email'
-				// 	& '&state=' & strState
-				// 	& '&response_type=code'
-				// );
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 6 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oFacebook.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oFacebook.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'public_profile email' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			// it( 'should call the `makeAccessTokenRequest`', function() {
-
-			// 	oFacebook.makeAccessTokenRequest(
-			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-			// 	);
-
-			// } );
-
-
-		});
+		} );
 
 	}
 	

@@ -75,26 +75,28 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				// expect( strURL ).toBe(
-				// 	oGithub.getAuthEndpoint() & '?client_id=' & clientId 
-				// 	& '&redirect_uri=' & oGithub.getRedirect_URI()
-				// 	& '&allow_signup=true'
-				// 	& '&scope=repo user'
-				// 	& '&state=' & strState
-				// );
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 6 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oGithub.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oGithub.getRedirect_URI() );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'repo user' );
+				expect( stuParams[ 'allow_signup' ] ).toBeString().toBe( 'true' );
 
 			} );
 
-			// it( 'should call the `makeAccessTokenRequest`', function() {
-
-			// 	oGithub.makeAccessTokenRequest(
-			// 		code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-			// 	);
-
-			// } );
-
-
-		});
+		} );
 
 	}
 	

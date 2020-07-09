@@ -34,7 +34,7 @@ component extends="oauth2" accessors="true" {
 
 	/**
 	* I return the URL as a string which we use to redirect the user for authentication.
-	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
+	* @expiration 
 	**/
 	public string function buildRedirectToAuthURL(
 		string expiration = ''

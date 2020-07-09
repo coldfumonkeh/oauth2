@@ -50,7 +50,7 @@ component extends="oauth2" accessors="true" {
 			structInsert(
 				sParams,
 				'scope',
-				arrayToList( arguments.scope, '&' )
+				arrayToList( arguments.scope, '%20' )
 			);
 		}
 		return super.buildRedirectToAuthURL( sParams );
