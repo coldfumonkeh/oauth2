@@ -10,7 +10,7 @@ steps:
     /tmp/box install production=false
     /tmp/box server start cfengine=lucee@4
     mkdir /tmp/results/
-    /tmp/box testbox run outputFile=testbox-results-lucee-4.xml reporter=junit
+    /tmp/box testbox run outputFile=testbox-lucee4.xml reporter=junit
   displayName: 'Run TestBox Tests'
   # env:
     #  FIXINATOR_API_KEY: $(FIXINATOR_API_KEY)
