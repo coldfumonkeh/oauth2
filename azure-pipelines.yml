@@ -93,7 +93,7 @@ stages:
         mkdir /tmp/results/
         /tmp/box testbox run outputFile=testbox-adobe18.xml reporter=junit
 - stage: Results
-  - task: PublishTestResults@2
+  task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: '**/testbox-*.xml' 
