@@ -62,19 +62,19 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should return a string when calling the `buildParamString` method', function() {
+			// it( 'should return a string when calling the `buildParamString` method', function() {
 
-				var strParams = oSalesForce.buildParamString(
-					argScope = {
-						'one' = 'one',
-						'two' = 'two'
-					}
-				);
+			// 	var strParams = oSalesForce.buildParamString(
+			// 		argScope = {
+			// 			'one' = 'one',
+			// 			'two' = 'two'
+			// 		}
+			// 	);
 
-				expect( strParams ).toBeString();
-				expect( strParams ).toBe( '&one=one&two=two' );
+			// 	expect( strParams ).toBeString();
+			// 	expect( strParams ).toBe( '&one=one&two=two' );
 
-			} );
+			// } );
 
 			it( 'should return a string when calling the `buildRedirectToAuthURL` method', function() {
 

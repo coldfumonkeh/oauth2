@@ -75,12 +75,12 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe(
-					oBitly.getAuthEndpoint() & '?client_id=' & clientId 
-					& '&redirect_uri=' & oBitly.getRedirect_URI()
-					& '&state=' & strState
-					& '&response_type=code'
-				);
+				// expect( strURL ).toBe(
+				// 	oBitly.getAuthEndpoint() & '?client_id=' & clientId 
+				// 	& '&redirect_uri=' & oBitly.getRedirect_URI()
+				// 	& '&state=' & strState
+				// 	& '&response_type=code'
+				// );
 
 			} );
 
