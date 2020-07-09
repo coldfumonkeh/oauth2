@@ -2,7 +2,7 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 stages:
-  - stage: Run TestBox Tests
+  - stage: Testing
     jobs:
     - job: Lucee4
       steps:
@@ -71,7 +71,7 @@ stages:
           mkdir /tmp/results/
           /tmp/box testbox run outputFile=testbox-adobe18.xml reporter=junit
   
-  - stage: Publish Results
+  - stage: Publish
     jobs:
     - job: Publish
       steps:
