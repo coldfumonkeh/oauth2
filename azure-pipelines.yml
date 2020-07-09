@@ -1,23 +1,23 @@
-trigger:
-- master
+pool:
+  vmImage: 'ubuntu-16.04'
 
-# image: ortussolutions/commandbox:lucee5-alpine
-
-stages:
-- stage: Test
-  jobs:
-  - job: Lucee4
-    container:
-      image: ortussolutions/commandbox
-    steps:
-      - script: box install production=false
-  - job: Lucee5
-    container:
-      image: ortussolutions/commandbox
-    steps:
-    - script: echo Testing on Linux!
-- stage: Deploy
-  jobs:
-  - job: Deploy
-    steps:
-    - script: echo Deploying the code!
+steps:
+- script: |
+    echo Starting the build
+    curl --location -o /tmp/box.zip https://www.ortussolutions.com/parent/download/commandbox/type/bin
+    unzip /tmp/box.zip -d /tmp/
+    chmod a+x /tmp/box
+    /tmp/box install production=false
+    /tmp/box server start cfengine=lucee@4
+    mkdir /tmp/results/
+    /tmp/box testbox run outputFile=testbox-lucee4.xml reporter=junit
+  displayName: 'Run TestBox Tests'
+  # env:
+    #  FIXINATOR_API_KEY: $(FIXINATOR_API_KEY)
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/testbox-*.xml' 
+    testRunTitle: TestBox Tests
+    failTaskOnFailedTests: true
+  displayName: 'TestBox Results'
