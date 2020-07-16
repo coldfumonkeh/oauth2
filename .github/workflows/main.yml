@@ -9,6 +9,6 @@ jobs:
         uses: actions/checkout@v2
       - name: CFML TestBox Test Runner
         id: cfml_testbox_test_runner
-        uses: actions/cfml-testbox-action@v1
+        uses: coldfumonkeh/cfml-testbox-action@v1
         with:
           cfml-engine: 'adobe@2018'
