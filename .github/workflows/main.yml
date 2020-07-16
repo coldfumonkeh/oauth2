@@ -21,15 +21,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Lucee 4 Unit Testing
     steps:
-        - name: CFML TestBox Test Runner
+      - name: CFML TestBox Test Runner
         uses: actions/cfml-testbox-action@v1
         with:
-            cfml-engine: 'lucee@4'
+          cfml-engine: 'lucee@4'
   Lucee_5:
     runs-on: ubuntu-latest
     name: Lucee 5 Unit Testing
     steps:
-        - name: CFML TestBox Test Runner
+      - name: CFML TestBox Test Runner
         uses: actions/cfml-testbox-action@v1
         with:
-            cfml-engine: 'lucee@5'
+          cfml-engine: 'lucee@5'
