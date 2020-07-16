@@ -12,7 +12,7 @@ jobs:
         uses: coldfumonkeh/cfml-testbox-action@v1
         with:
           cfml-engine: 'adobe@2018'
- ACF_2016:
+  ACF_2016:
     runs-on: ubuntu-latest
     name: Adobe 2016 Unit Testing
     steps:
