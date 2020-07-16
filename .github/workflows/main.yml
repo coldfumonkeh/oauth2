@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  cfml_testbox_test_runner:
+    runs-on: ubuntu-latest
+    name: CFML TestBox
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: CFML TestBox Test Runner
+        id: cfml_testbox_test_runner
+        uses: actions/cfml-testbox-action@v1
+        with:
+          cfml-engine: 'adobe@2018'
