@@ -32,16 +32,17 @@ component extends="oauth2" accessors="true" {
 
 	/**
 	* I return the URL as a string which we use to redirect the user for authentication.
-	* @scope An optional array of values to pass through for scope access.
+	* More info on parameters: https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#request-an-authorization-code
+	* @parameters An optional structure containing key / value pairs of data to be included in the URL string.
 	**/
 	public string function buildRedirectToAuthURL(
-		array scope
+		struct parameters = {}
 	){
 		var sParams = {
 			'response_type' = 'code'
 		};
-		if( arrayLen( arguments.scope ) ){
-			structInsert( sParams, 'scope', arrayToList( arguments.scope, ' ' ) );
+		if( !structIsEmpty( arguments.parameters ) ){
+			structAppend( sParams, arguments.parameters, false );
 		}
 		return super.buildRedirectToAuthURL( sParams );
 	}
