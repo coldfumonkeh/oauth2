@@ -50,9 +50,7 @@ component extends="oauth2" accessors="true" {
 		if( len( arguments.state ) ){
 			structInsert( sParams, 'state', arguments.state );
 		}
-		if( len( arguments.team ) ){
-			structInsert( sParams, 'team', arguments.team );
-		}
+		structInsert( sParams, 'force_verify', arguments.force_verify );
 		return super.buildRedirectToAuthURL( sParams );
 	}
 
