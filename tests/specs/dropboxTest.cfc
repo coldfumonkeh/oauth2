@@ -71,28 +71,31 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe(
-					oDropbox.getAuthEndpoint() & '?client_id=' & clientId 
-					& '&redirect_uri=' & oDropbox.getRedirect_URI()
-					& '&force_reauthentication=false'
-					& '&disable_signup=false'
-					& '&force_reapprove=false'
-					& '&state=' & strState
-					& '&response_type=code'
-				);
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 8 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oDropbox.getAuthEndpoint() );
+
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oDropbox.getRedirect_URI() );
+				expect( stuParams[ 'disable_signup' ] ).toBeString().toBe( 'false' );
+				expect( stuParams[ 'force_reauthentication' ] ).toBeString().toBe( 'false' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'force_reapprove' ] ).toBeString().toBe( 'false' );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
-
-				var test = oDropbox.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
-
-			} );
-
-
-		});
+		} );
 
 	}
 	

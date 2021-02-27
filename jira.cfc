@@ -7,19 +7,18 @@ component extends="oauth2" accessors="true" {
 	property name="redirect_uri" type="string";
 	
 	/**
-	* I return an initialized linkedIn object instance.
+	* I return an initialized jira object instance.
 	* @client_id The client ID for your application.
 	* @client_secret The client secret for your application.
 	* @authEndpoint The URL endpoint that handles the authorisation.
 	* @accessTokenEndpoint The URL endpoint that handles retrieving the access token.
 	* @redirect_uri The URL to redirect the user back to following authentication.
 	**/
-	public linkedIn function init(
+	public jira function init(
 		required string client_id, 
 		required string client_secret, 
-		required string authEndpoint = 'https://www.linkedin.com/oauth/v2/authorization', 
-		required string accessTokenEndpoint = 'https://www.linkedin.com/oauth/v2/accessToken
-', 
+		required string authEndpoint = 'https://auth.atlassian.com/authorize', 
+		required string accessTokenEndpoint = 'https://auth.atlassian.com/oauth/token',
 		required string redirect_uri
 	)
 	{
@@ -35,23 +34,24 @@ component extends="oauth2" accessors="true" {
 
 	/**
 	* I return the URL as a string which we use to redirect the user for authentication.
+	* @scope An array of values to pass through for scope access.
 	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
-	* @scope An optional array of values to pass through for scope access.
 	**/
 	public string function buildRedirectToAuthURL(
-		required string state,
-		array scope = []
+		required array scope,
+		required string state
 	){
 		var sParams = {
+			'audience'      = 'api.atlassian.com',
 			'response_type' = 'code',
-			'state'         = arguments.state
+			'prompt'        = 'consent'
 		};
+
 		if( arrayLen( arguments.scope ) ){
-			structInsert(
-				sParams,
-				'scope',
-				arrayToList( arguments.scope, '%20' )
-			);
+			structInsert( sParams, 'scope', arrayToList( arguments.scope, ' ' ) );
+		}
+		if( len( arguments.state ) ){
+			structInsert( sParams, 'state', arguments.state );
 		}
 		return super.buildRedirectToAuthURL( sParams );
 	}

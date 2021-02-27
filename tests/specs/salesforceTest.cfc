@@ -4,9 +4,9 @@ component extends='testbox.system.BaseSpec'{
 	
 	function run(){
 
-		describe( 'Microsoft Component Suite', function(){
+		describe( 'Salesforce Component Suite', function(){
 			
-			variables.thisProvider = 'microsoft';
+			variables.thisProvider = 'salesforce';
 			variables.sProviderData = {};
 
 			include 'providerData.properties.cfm';
@@ -21,7 +21,7 @@ component extends='testbox.system.BaseSpec'{
 			var clientSecret = variables.sProviderData[ 'clientSecret' ];
 			var redirect_uri = variables.sProviderData[ 'redirect_uri' ];
 
-			var oMicrosoft = new microsoft(
+			var oSalesForce = new salesforce(
 				client_id           = clientId,
 				client_secret       = clientSecret,
 				redirect_uri        = redirect_uri
@@ -29,14 +29,14 @@ component extends='testbox.system.BaseSpec'{
 			
 			it( 'should return the correct object', function(){
 
-				expect( oMicrosoft ).toBeInstanceOf( 'microsoft' );
-				expect( oMicrosoft ).toBeTypeOf( 'component' );
+				expect( oSalesForce ).toBeInstanceOf( 'salesforce' );
+				expect( oSalesForce ).toBeTypeOf( 'component' );
 
 			});
 
 			it( 'should have the correct properties', function() {
 
-				var sMemento = oMicrosoft.getMemento();
+				var sMemento = oSalesForce.getMemento();
 
 				expect( sMemento ).toBeStruct().toHaveLength( 5 );
 
@@ -54,21 +54,34 @@ component extends='testbox.system.BaseSpec'{
 
 			it( 'should have the correct methods', function() {
 
-				expect( oMicrosoft ).toHaveKey( 'init' );
-				expect( oMicrosoft ).toHaveKey( 'buildRedirectToAuthURL' );
-				expect( oMicrosoft ).toHaveKey( 'makeAccessTokenRequest' );
-				expect( oMicrosoft ).toHaveKey( 'buildParamString' );
-				expect( oMicrosoft ).toHaveKey( 'getMemento' );
+				expect( oSalesForce ).toHaveKey( 'init' );
+				expect( oSalesForce ).toHaveKey( 'buildRedirectToAuthURL' );
+				expect( oSalesForce ).toHaveKey( 'makeAccessTokenRequest' );
+				expect( oSalesForce ).toHaveKey( 'buildParamString' );
+				expect( oSalesForce ).toHaveKey( 'getMemento' );
 
 			} );
 
 			it( 'should return a string when calling the `buildRedirectToAuthURL` method', function() {
 
+				var strState = createUUID();
+				var strURL = oSalesForce.buildRedirectToAuthURL( state = strState );
+
+				expect( strURL ).toBeString();
+				expect( listToArray( strURL, '&?' ) ).toHaveLength( 5 );
+
+			} );
+
+			it( 'should return a string when calling the `buildRedirectToAuthURL` method with scopes', function() {
+
+				var strState = createUUID();
 				var aScope = [
-					'User.Read',
-					'Contacts.Read'
+					'api',
+					'refresh_token'
 				];
-				var strURL = oMicrosoft.buildRedirectToAuthURL(
+
+				var strURL = oSalesForce.buildRedirectToAuthURL(
+					state = strState,
 					scope = aScope
 				);
 
@@ -76,10 +89,10 @@ component extends='testbox.system.BaseSpec'{
 
 				var arrData = listToArray( strURL, '&?' );
 
-				expect( arrData ).toHaveLength( 5 );
+				expect( arrData ).toHaveLength( 6 );
 				expect( arrData[ 1 ] )
 					.toBeString()
-					.toBe( oMicrosoft.getAuthEndpoint() );
+					.toBe( oSalesForce.getAuthEndpoint() );
 
 				var stuParams = {};
 				for( var i = 2; i <= arrayLen( arrData ); i++ ){
@@ -87,8 +100,9 @@ component extends='testbox.system.BaseSpec'{
 				}
 
 				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
-				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oMicrosoft.getRedirect_URI() );
-				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'User.Read Contacts.Read' );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSalesForce.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'api refresh_token' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
 				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );

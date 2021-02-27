@@ -7,19 +7,18 @@ component extends="oauth2" accessors="true" {
 	property name="redirect_uri" type="string";
 	
 	/**
-	* I return an initialized linkedIn object instance.
+	* I return an initialized twitch object instance.
 	* @client_id The client ID for your application.
 	* @client_secret The client secret for your application.
 	* @authEndpoint The URL endpoint that handles the authorisation.
 	* @accessTokenEndpoint The URL endpoint that handles retrieving the access token.
 	* @redirect_uri The URL to redirect the user back to following authentication.
 	**/
-	public linkedIn function init(
+	public twitch function init(
 		required string client_id, 
 		required string client_secret, 
-		required string authEndpoint = 'https://www.linkedin.com/oauth/v2/authorization', 
-		required string accessTokenEndpoint = 'https://www.linkedin.com/oauth/v2/accessToken
-', 
+		required string authEndpoint = 'https://id.twitch.tv/oauth2/authorize', 
+		required string accessTokenEndpoint = 'https://id.twitch.tv/oauth2/token',
 		required string redirect_uri
 	)
 	{
@@ -35,24 +34,23 @@ component extends="oauth2" accessors="true" {
 
 	/**
 	* I return the URL as a string which we use to redirect the user for authentication.
-	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
 	* @scope An optional array of values to pass through for scope access.
+	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
+	* @force_verify Specifies whether the user should be re-prompted for authorization. If this is true, the user always is prompted to confirm authorization.
 	**/
 	public string function buildRedirectToAuthURL(
-		required string state,
-		array scope = []
+		required array scope,
+		string state = '',
+		boolean force_verify = false
 	){
 		var sParams = {
 			'response_type' = 'code',
-			'state'         = arguments.state
+			'scope'         = arrayToList( arguments.scope, ' ' )
 		};
-		if( arrayLen( arguments.scope ) ){
-			structInsert(
-				sParams,
-				'scope',
-				arrayToList( arguments.scope, '%20' )
-			);
+		if( len( arguments.state ) ){
+			structInsert( sParams, 'state', arguments.state );
 		}
+		structInsert( sParams, 'force_verify', arguments.force_verify );
 		return super.buildRedirectToAuthURL( sParams );
 	}
 
@@ -69,6 +67,30 @@ component extends="oauth2" accessors="true" {
 				'value' = 'authorization_code'
 			}
 		];
+		return super.makeAccessTokenRequest(
+			code       = arguments.code,
+			formfields = aFormFields
+		);
+	}
+
+	/**
+	* I make the HTTP request to obtain the access token.
+	* @scope An optional space-separated list of scopes.
+	**/
+	public struct function makeClientCredentialsRequest(
+		array scope = []
+	){
+		var aFormFields = [
+			{
+				'name'  = 'grant_type',
+				'value' = 'client_credentials'
+			},
+			{
+				'name'  = 'scope',
+				'value' = arrayToList( arguments.scope, ' ' )
+			}
+		];
+		
 		return super.makeAccessTokenRequest(
 			code       = arguments.code,
 			formfields = aFormFields

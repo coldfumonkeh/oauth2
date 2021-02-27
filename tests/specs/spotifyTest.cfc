@@ -75,27 +75,29 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe(
-					oSpotify.getAuthEndpoint() & '?client_id=' & clientId 
-					& '&redirect_uri=' & oSpotify.getRedirect_URI()
-					& '&state=' & strState
-					& '&scope=playlist-read-private user-library-read'
-					& '&response_type=code'
-					& '&show_dialog=false'
-				);
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 7 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oSpotify.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSpotify.getRedirect_URI() );
+				expect( stuParams[ 'show_dialog' ] ).toBeString().toBe( 'false' );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'playlist-read-private user-library-read' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
-
-				oSpotify.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
-
-			} );
-
-
-		});
+		} );
 
 	}
 	

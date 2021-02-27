@@ -7,19 +7,22 @@ component extends="oauth2" accessors="true" {
 	property name="redirect_uri" type="string";
 	
 	/**
-	* I return an initialized esri object instance.
+	* I return an initialized xero object instance.
 	* @client_id The client ID for your application.
 	* @client_secret The client secret for your application.
 	* @authEndpoint The URL endpoint that handles the authorisation.
 	* @accessTokenEndpoint The URL endpoint that handles retrieving the access token.
 	* @redirect_uri The URL to redirect the user back to following authentication.
+	* see https://developer.xero.com/documentation/oauth2/auth-flow
+	* see https://developer.xero.com/myapps/
+	* see https://github.com/richardmh/xero2
 	**/
-	public esri function init(
+	public xero function init(
 		required string client_id, 
 		required string client_secret, 
-		required string authEndpoint = 'https://www.arcgis.com/sharing/rest/oauth2/authorize/', 
-		required string accessTokenEndpoint = 'https://www.arcgis.com/sharing/rest/oauth2/token/',
-		required string redirect_uri
+		required string redirect_uri,
+		required string authEndpoint = 'https://login.xero.com/identity/connect/authorize', 
+		required string accessTokenEndpoint = 'https://identity.xero.com/connect/token'
 	)
 	{
 		super.init(
@@ -35,15 +38,22 @@ component extends="oauth2" accessors="true" {
 	/**
 	* I return the URL as a string which we use to redirect the user for authentication.
 	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
+	* @scope An optional array of values to pass through for scope access.
 	**/
 	public string function buildRedirectToAuthURL(
-		string expiration = ''
+		required string state,
+		array scope = []
 	){
 		var sParams = {
-			'response_type' = 'code'
+			'response_type' = 'code',
+			'state'         = arguments.state
 		};
-		if( len( arguments.expiration ) ){
-			structInsert( sParams, 'expiration', arguments.expiration );
+		if( arrayLen( arguments.scope ) ){
+			structInsert(
+				sParams,
+				'scope',
+				arrayToList( arguments.scope, '%20' )
+			);
 		}
 		return super.buildRedirectToAuthURL( sParams );
 	}
@@ -66,50 +76,29 @@ component extends="oauth2" accessors="true" {
 			formfields = aFormFields
 		);
 	}
-
+	
 	/**
 	* I make the HTTP request to refresh the access token.
-	* @refresh_token The refresh_token returned from the accessTokenRequest request.
-	**/
-	public struct function refreshAccessTokenRequest(
-		required string refresh_token
-	){
-		return super.refreshAccessTokenRequest(
-			refresh_token       = refresh_token
-		);
-	}
-
-	/**
-	* I make the HTTP request to refresh the refresh and access token.
-	* @code The code returned from the authentication request.
-	* @formfields An optional array of structs for the provider requirements to add new form fields.
-	* @headers An optional array of structs to add custom headers to the request if required.
+	* @refresh_token As returned with the most recent access token.
+	* xero requires:
+	* header:  Authorization: "Basic " + toBase64(client_id + ":" + client_secret)
+	* body: grant_type="refresh_token"
+	* body: refresh_token="Your refresh token"
 	**/
 	public struct function makeRefreshTokenRequest(
-		required string refresh_token,
-		array formfields = [],
-		array headers    = []
+		required string refresh_token
 	){
 		var stuResponse = {};
 	    var httpService = new http();
 	    httpService.setMethod( "post" ); 
 	    httpService.setCharset( "utf-8" );
 	    httpService.setUrl( getAccessTokenEndpoint() );
-	    if( arrayLen( arguments.headers ) ){
-	    	for( var item in arguments.headers ){
-	    		httpService.addParam( type="header", name=item[ 'name' ],  value=item[ 'value' ] );
-	    	}
-	    }
-	    httpService.addParam( type="formfield", name="client_id", 	 value=getClient_id() );
-	    httpService.addParam( type="formfield", name="client_secret", value=getClient_secret() );
-			httpService.addParam( type="formfield", name="refresh_token", value=arguments.refresh_token );
-	    httpService.addParam( type="formfield", name="grant_type",  value="exchange_refresh_token" );
-	    httpService.addParam( type="formfield", name="redirect_uri",  value=getRedirect_uri() );
-	    if( arrayLen( arguments.formfields ) ){
-	    	for( var item in arguments.formfields ){
-	    		httpService.addParam( type="formfield", name=item[ 'name' ],  value=item[ 'value' ] );
-	    	}
-	    }
+	    httpService.addParam( type="header", name="Content-Type", value="application/x-www-form-urlencoded" );
+	    var str = "#getClient_id()#:#getClient_secret()#";
+	    httpService.addParam( type="header", name="Authorization", value="Basic #toBase64(str)#" );
+	    httpService.addParam( type="formfield", name="grant_type", 	 value="refresh_token" );
+	    httpService.addParam( type="formfield", name="refresh_token", 	 value=arguments.refresh_token );
+	    
 	    var result = httpService.send().getPrefix();
 	    if( '200' == result.ResponseHeader[ 'Status_Code' ] ) {
 	    	stuResponse.success = true;

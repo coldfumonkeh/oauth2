@@ -75,26 +75,28 @@ component extends='testbox.system.BaseSpec'{
 				);
 
 				expect( strURL ).toBeString();
-				expect( strURL ).toBe(
-					oSlack.getAuthEndpoint() & '?client_id=' & clientId 
-					& '&redirect_uri=' & oSlack.getRedirect_URI()
-					& '&state=' & strState
-					& '&scope=channels:read users:read'
-					& '&response_type=code'
-				);
+
+				var arrData = listToArray( strURL, '&?' );
+
+				expect( arrData ).toHaveLength( 6 );
+				expect( arrData[ 1 ] )
+					.toBeString()
+					.toBe( oSlack.getAuthEndpoint() );
+
+				var stuParams = {};
+				for( var i = 2; i <= arrayLen( arrData ); i++ ){
+					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+				}
+
+				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSlack.getRedirect_URI() );
+				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'channels:read users:read' );
+				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
 
 			} );
 
-			it( 'should call the `makeAccessTokenRequest`', function() {
-
-				oSlack.makeAccessTokenRequest(
-					code = 'PFddTB51o5m1GtfyhTC2pxf8MnEQrFo'
-				);
-
-			} );
-
-
-		});
+		} );
 
 	}
 	

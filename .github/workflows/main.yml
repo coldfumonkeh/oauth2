@@ -1,0 +1,25 @@
+on: [push,pull_request]
+
+jobs:
+  ACF_2018:
+    runs-on: ubuntu-latest
+    name: Adobe 2018 Unit Testing
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: CFML TestBox Test Runner
+        id: acf_2018_test
+        uses: coldfumonkeh/cfml-testbox-action@v1
+        with:
+          cfml-engine: 'adobe@2018'
+  ACF_2016:
+    runs-on: ubuntu-latest
+    name: Adobe 2016 Unit Testing
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: CFML TestBox Test Runner
+        id: acf_2016_test
+        uses: coldfumonkeh/cfml-testbox-action@v1
+        with:
+          cfml-engine: 'adobe@2016'

@@ -43,10 +43,10 @@ component extends="oauth2" accessors="true" {
 	**/
 	public string function buildRedirectToAuthURL(
 		required string state,
-		string require_role,
+		string require_role     = '',
 		boolean force_reapprove = false,
-		boolean disable_signup = false,
-		string locale,
+		boolean disable_signup  = false,
+		string locale           = '',
 		boolean force_reauthentication = false
 	){
 		var sParams = {

@@ -18,7 +18,7 @@ component extends="oauth2" accessors="true" {
 		required string client_id, 
 		required string client_secret, 
 		required string authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth', 
-		required string accessTokenEndpoint = 'https://www.googleapis.com//oauth2/v4/token',
+		required string accessTokenEndpoint = 'https://www.googleapis.com/oauth2/v4/token',
 		required string redirect_uri
 	)
 	{
@@ -48,8 +48,8 @@ Set the parameter value to an email address or sub identifier.
 		required string access_type = 'online',
 		required string state,
 		boolean include_granted_scopes = true,
-		string login_hint,
-		string prompt
+		string login_hint              = '',
+		string prompt                  = ''
 	){
 		var sParams = {
 			'response_type'          = 'code',

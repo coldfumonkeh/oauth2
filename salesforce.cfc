@@ -14,12 +14,11 @@ component extends="oauth2" accessors="true" {
 	* @accessTokenEndpoint The URL endpoint that handles retrieving the access token.
 	* @redirect_uri The URL to redirect the user back to following authentication.
 	**/
-	public linkedIn function init(
+	public salesforce function init(
 		required string client_id, 
 		required string client_secret, 
-		required string authEndpoint = 'https://www.linkedin.com/oauth/v2/authorization', 
-		required string accessTokenEndpoint = 'https://www.linkedin.com/oauth/v2/accessToken
-', 
+		required string authEndpoint = 'https://login.salesforce.com/services/oauth2/authorize', 
+		required string accessTokenEndpoint = 'https://login.salesforce.com/services/oauth2/token', 
 		required string redirect_uri
 	)
 	{
@@ -39,18 +38,20 @@ component extends="oauth2" accessors="true" {
 	* @scope An optional array of values to pass through for scope access.
 	**/
 	public string function buildRedirectToAuthURL(
-		required string state,
+		string state = '',
 		array scope = []
 	){
 		var sParams = {
-			'response_type' = 'code',
-			'state'         = arguments.state
+			'response_type' = 'code'
 		};
+		if( len( arguments.state ) ){
+			structInsert( sParams, 'state', arguments.state );
+		}
 		if( arrayLen( arguments.scope ) ){
 			structInsert(
 				sParams,
 				'scope',
-				arrayToList( arguments.scope, '%20' )
+				arrayToList( arguments.scope, ' ' )
 			);
 		}
 		return super.buildRedirectToAuthURL( sParams );
