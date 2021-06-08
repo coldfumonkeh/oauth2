@@ -15,6 +15,7 @@ component extends="oauth2" accessors="true" {
 	**/
 	public microsoft function init(
 		required string client_id,
+		required string client_secret,
 		required string authEndpoint = 'https://login.live.com/oauth20_authorize.srf', 
 		required string accessTokenEndpoint = 'https://login.live.com/oauth20_token.srf',
 		required string redirect_uri
