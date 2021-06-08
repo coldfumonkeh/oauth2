@@ -42,6 +42,14 @@
 	<cfset backPath = reReplace( backpath, "/$", "" )>
 </cfif>
 
+<cfscript>
+	jsAssets = directoryList(expandPath("/testbox/system/reports/assets/js/"), false, "name");
+	jqFile = arrayFilter(jsAssets, function(item){
+		return refind("^jquery.*.js",item);
+	});
+	jqPath = "/testbox/system/reports/assets/js/" & jqFile[1];
+</cfscript>
+
 <!--- Do HTML --->
 <!DOCTYPE html>
 <html>
@@ -49,7 +57,7 @@
 	<meta charset="utf-8">
 	<meta name="generator" content="TestBox v#testbox.getVersion()#">
 	<title>TestBox Global Runner</title>
-	<script><cfinclude template="/testbox/system/reports/assets/js/jquery.js"></script>
+	<script><cfinclude template="#jqPath#"></script>
 	<script>
 	$(document).ready(function() {
 
