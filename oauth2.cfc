@@ -211,8 +211,8 @@ component accessors="true"{
 	private string function generateRandomString( numeric length = 100 ){
 		var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
 		var str = '';
-		var length = ( arguments.length < 43 || arguments.length > 128 ) ? 100 : arguments.length;
-		for( var i = 0; i < length; i++){
+		var intLength = ( arguments.length < 43 || arguments.length > 128 ) ? 100 : arguments.length;
+		for( var i = 0; i < intLength; i++){
 			str &= mid( chars, randrange( 1, len( chars ) ), 1 );
 		}
 		return str;
