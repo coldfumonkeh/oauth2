@@ -30,6 +30,25 @@
         "test",
         "tests"
     ],
+    "testbox":{
+        "runner":"http://127.0.0.1:50750/tests/runner.cfm",
+        "labels":[],
+        "reporter":"",
+        "reporterResults":"",
+        "bundles":[
+            ""
+        ],
+        "directory":{
+            "mapping":"",
+            "recurse":true
+        },
+        "watchers":[],
+        "notify":{
+            "emails":[],
+            "growl":"",
+            "URL":""
+        }
+    },
     "dependencies":{},
     "devDependencies":{
         "testbox":"^2.5.0+107"

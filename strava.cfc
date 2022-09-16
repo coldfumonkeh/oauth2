@@ -60,12 +60,7 @@ component extends="oauth2" accessors="true" {
 	public struct function makeAccessTokenRequest(
 		required string code
 	){
-		var aFormFields = [
-			{
-				'name'  = 'grant_type',
-				'value' = 'authorization_code'
-			}
-		];
+		var aFormFields = [];
 		return super.makeAccessTokenRequest(
 			code       = arguments.code,
 			formfields = aFormFields

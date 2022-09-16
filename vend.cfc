@@ -59,13 +59,7 @@ component extends="oauth2" accessors="true" {
 				'value' = 'application/x-www-form-urlencoded'
 			}
 		];
-		
-		var aFormFields = [
-			{
-				'name'  = 'grant_type',
-				'value' = 'authorization_code'
-			}
-		];
+		var aFormFields = [];
 		return super.makeAccessTokenRequest(
 			code       = arguments.code,
 			formfields = aFormFields,

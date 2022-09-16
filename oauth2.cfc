@@ -43,7 +43,10 @@ component accessors="true"{
 	* @parameters A structure containing key / value pairs of data to be included in the URL string.
 	**/
 	public string function buildRedirectToAuthURL( struct parameters={} ) {
-		return getAuthEndpoint() & '?client_id=' & getClient_id() & '&redirect_uri=' & getRedirect_uri() & buildParamString( argScope = arguments.parameters );
+		var stuParams = arguments.parameters;
+		stuParams[ 'client_id' ] = getClient_id();
+		stuParams[ 'redirect_uri' ] = getRedirect_uri();
+		return getAuthEndpoint() & buildParamString( argScope = stuParams );
 	}
 	
 	/**
@@ -67,10 +70,11 @@ component accessors="true"{
 	    		httpService.addParam( type="header", name=item[ 'name' ],  value=item[ 'value' ] );
 	    	}
 	    }
-	    httpService.addParam( type="formfield", name="client_id", 	 value=getClient_id() );
+	    httpService.addParam( type="formfield", name="client_id", value=getClient_id() );
 	    httpService.addParam( type="formfield", name="client_secret", value=getClient_secret() );
-	    httpService.addParam( type="formfield", name="code", 		 value=arguments.code );
-	    httpService.addParam( type="formfield", name="redirect_uri",  value=getRedirect_uri() );
+	    httpService.addParam( type="formfield", name="code", value=arguments.code );
+	    httpService.addParam( type="formfield", name="redirect_uri", value=getRedirect_uri() );
+		httpService.addParam( type="formfield", name="grant_type", value='authorization_code' );
 	    if( arrayLen( arguments.formfields ) ){
 	    	for( var item in arguments.formfields ){
 	    		httpService.addParam( type="formfield", name=item[ 'name' ],  value=item[ 'value' ] );
@@ -85,6 +89,31 @@ component accessors="true"{
 	    	stuResponse.content = result.Statuscode;
 	    }
     	return stuResponse;
+	}
+
+	/**
+	* I make the HTTP request to obtain the access token AND send a PKCE code verifier value.
+	* @code The code returned from the authentication request.
+	* @code_verifier The PKCE code verifier value to send to the server.
+	* @formfields An optional array of structs for the provider requirements to add new form fields.
+	* @headers An optional array of structs to add custom headers to the request if required.
+	**/
+	public struct function makeAccessTokenRequestWithPKCE(
+		required string code,
+		required string code_verifier,
+		array formfields = [],
+		array headers    = []
+	){
+		var arrFormFields = arguments.formfields;
+		arrayAppend( arrFormFields, {
+			'name': 'code_verifier',
+			'value': arguments.code_verifier
+		} );
+		return makeAccessTokenRequest(
+			code       = arguments.code,
+			formfields = arrFormFields,
+			headers    = arguments.headers
+		);
 	}
 
 	/**
@@ -132,15 +161,16 @@ component accessors="true"{
 	* @argScope A structure containing key / value pairs of data to be included in the URL string.
 	**/
 	public string function buildParamString( struct argScope={} ) {
-		var strURLParam = '';
+		var strURLParam = '?';
 		if( structCount( arguments.argScope ) ) {
+			var intCount = 1;
 			for( var key in arguments.argScope ) {
-				if( listLen( strURLParam ) ) {
+				if( listLen( strURLParam ) && intCount > 1 ) {
 					strURLParam = strURLParam & '&';
 				}
 				strURLParam = strURLParam & lcase( key ) & '=' & trim( arguments.argScope[ key ] );
+				intCount++;
 			}
-			strURLParam = '&' & strURLParam;
 		}
 		return strURLParam;
 	}
@@ -156,6 +186,36 @@ component accessors="true"{
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Generates a struct containing the code verifier and code challenger values
+	 *
+	 * @length The length of the code verifier string to be generated. Between 43 and 128 characters. Defaults to 100.
+	 */
+	public struct function generatePKCE( numeric length = 100 ){
+		var code_verifier = generateRandomString( arguments.length );
+		return {
+			'code_verifier': code_verifier,
+			'code_challenge': binaryEncode( charsetDecode( hash( code_verifier, 'sha-256' ), 'utf-8' ), 'base64' ),
+			'code_challenge_method': 'S256'
+		};
+	}
+
+
+	/**
+	 * Generates a random string to the given length of characters
+	 *
+	 * @length The length of the string to be generated. Between 43 and 128 characters. Defaults to 100.
+	 */
+	private string function generateRandomString( numeric length = 100 ){
+		var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+		var str = '';
+		var length = ( arguments.length < 43 || arguments.length > 128 ) ? 100 : arguments.length;
+		for( var i = 0; i < length; i++){
+			str &= mid( chars, randrange( 1, len( chars ) ), 1 );
+		}
+		return str;
 	}
 
 }
