@@ -1,11 +1,11 @@
 component extends='testbox.system.BaseSpec'{
-	
+
 	/*********************************** BDD SUITES ***********************************/
-	
+
 	function run(){
 
 		describe( 'Spotify Component Suite', function(){
-			
+
 			variables.thisProvider  = 'spotify';
 			variables.sProviderData = {};
 
@@ -26,7 +26,7 @@ component extends='testbox.system.BaseSpec'{
 				client_secret       = clientSecret,
 				redirect_uri        = redirect_uri
 			);
-			
+
 			it( 'should return the correct object', function(){
 
 				expect( oSpotify ).toBeInstanceOf( 'spotify' );
@@ -62,43 +62,97 @@ component extends='testbox.system.BaseSpec'{
 
 			} );
 
-			it( 'should return a string when calling the `buildRedirectToAuthURL` method', function() {
 
-				var strState = createUUID();
-				var aScope = [
-					'playlist-read-private',
-					'user-library-read'
-				];
-				var strURL = oSpotify.buildRedirectToAuthURL(
-					scope = aScope,
-					state = strState
-				);
+			describe( 'The buildRedirectToAuthURL() method', function(){
 
-				expect( strURL ).toBeString();
+				it( 'should return the expected string', function() {
 
-				var arrData = listToArray( strURL, '&?' );
+					var strState = createUUID();
+					var aScope = [
+						'playlist-read-private',
+						'user-library-read'
+					];
+					var strURL = oSpotify.buildRedirectToAuthURL(
+						scope = aScope,
+						state = strState
+					);
 
-				expect( arrData ).toHaveLength( 7 );
-				expect( arrData[ 1 ] )
-					.toBeString()
-					.toBe( oSpotify.getAuthEndpoint() );
+					expect( strURL ).toBeString();
 
-				var stuParams = {};
-				for( var i = 2; i <= arrayLen( arrData ); i++ ){
-					structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
-				}
+					var arrData = listToArray( strURL, '&?' );
 
-				expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
-				expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSpotify.getRedirect_URI() );
-				expect( stuParams[ 'show_dialog' ] ).toBeString().toBe( 'false' );
-				expect( stuParams[ 'scope' ] ).toBeString().toBe( 'playlist-read-private user-library-read' );
-				expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
-				expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
+					expect( arrData ).toHaveLength( 7 );
+					expect( arrData[ 1 ] )
+						.toBeString()
+						.toBe( oSpotify.getAuthEndpoint() );
+
+					var stuParams = {};
+					for( var i = 2; i <= arrayLen( arrData ); i++ ){
+						structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+					}
+
+					expect( stuParams ).notToHaveKey( 'code_challenge' );
+					expect( stuParams ).notToHaveKey( 'code_challenge_method' );
+
+					expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+					expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSpotify.getRedirect_URI() );
+					expect( stuParams[ 'show_dialog' ] ).toBeString().toBe( 'false' );
+					expect( stuParams[ 'scope' ] ).toBeString().toBe( 'playlist-read-private user-library-read' );
+					expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+					expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
+
+				} );
+
+				it( 'should return the expected string with PKCE when usePKCE is true', function() {
+
+					var strState = createUUID();
+					var aScope = [
+						'playlist-read-private',
+						'user-library-read'
+					];
+					var strURL = oSpotify.buildRedirectToAuthURL(
+						scope = aScope,
+						state = strState,
+						usePKCE = true
+					);
+
+					expect( strURL ).toBeString();
+
+					var arrData = listToArray( strURL, '&?' );
+
+					expect( arrData ).toHaveLength( 9 );
+					expect( arrData[ 1 ] )
+						.toBeString()
+						.toBe( oSpotify.getAuthEndpoint() );
+
+					var stuParams = {};
+					for( var i = 2; i <= arrayLen( arrData ); i++ ){
+						structInsert( stuParams, listGetAt( arrData[ i ], 1, '=' ), listGetAt( arrData[ i ], 2, '=' ) );
+					}
+
+					expect( stuParams ).toHaveKey( 'code_challenge' );
+					expect( stuParams ).toHaveKey( 'code_challenge_method' );
+
+					expect( oSpotify.getPKCE() )
+						.toBeStruct()
+						.toHaveLength( 3 )
+						.toHaveKey( 'code_challenge_method' )
+						.toHaveKey( 'code_challenge' )
+						.toHaveKey( 'code_verifier' );
+
+					expect( stuParams[ 'client_id' ] ).toBeString().toBe( clientId );
+					expect( stuParams[ 'redirect_uri' ] ).toBeString().toBe( oSpotify.getRedirect_URI() );
+					expect( stuParams[ 'show_dialog' ] ).toBeString().toBe( 'false' );
+					expect( stuParams[ 'scope' ] ).toBeString().toBe( 'playlist-read-private user-library-read' );
+					expect( stuParams[ 'state' ] ).toBeString().toBe( strState );
+					expect( stuParams[ 'response_type' ] ).toBeString().toBe( 'code' );
+
+				} );
 
 			} );
 
 		} );
 
 	}
-	
+
 }

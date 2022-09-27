@@ -35,25 +35,40 @@ component extends="oauth2" accessors="true" {
 	/**
 	* I return the URL as a string which we use to redirect the user for authentication.
 	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
+	* @usePKCE Boolean value. If true, the PKCE extension is triggered and will generate PKCE data and also store it as a CFC property.
 	**/
 	public string function buildRedirectToAuthURL(
-		required string state
+		required string state,
+		boolean usePKCE = false
 	){
 		var sParams = {
 			'response_type' = 'code',
 			'state'         = arguments.state
 		};
+		if( arguments.usePKCE ){
+			var stuPKCE = super.generatePKCE();
+			setPKCE( stuPKCE );
+			structAppend( sParams, stuPKCE );
+		}
 		return super.buildRedirectToAuthURL( sParams );
 	}
 
 	/**
 	* I make the HTTP request to obtain the access token.
 	* @code The code returned from the authentication request.
+	* @usePKCE Boolean value. If true, the PKCE extension is triggered and will use the stored PKCE code_verifier
 	**/
 	public struct function makeAccessTokenRequest(
-		required string code
+		required string code,
+		boolean usePKCE = false
 	){
 		var aFormFields = [];
+		if( arguments.usePKCE ){
+			arrayAppend( aFormFields, {
+				'name': 'code_verifier',
+				'value': getPKCE()[ 'code_verifier' ]
+			} );
+		}
 		return super.makeAccessTokenRequest(
 			code       = arguments.code,
 			formfields = aFormFields

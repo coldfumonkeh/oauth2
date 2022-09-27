@@ -40,6 +40,7 @@ component extends="oauth2" accessors="true" {
 	* @disable_signup When true (default is false) users will not be able to sign up for a Dropbox account via the authorization page. Instead, the authorization page will show a link to the Dropbox iOS app in the App Store. This is only intended for use when necessary for compliance with App Store policies.
 	* @locale If the locale specified is a supported language, Dropbox will direct users to a translated version of the authorization website. Locale tags should be IETF language tags.
 	* @force_reauthentication
+	* @usePKCE Boolean value. If true, the PKCE extension is triggered and will generate PKCE data and also store it as a CFC property.
 	**/
 	public string function buildRedirectToAuthURL(
 		required string state,
@@ -47,7 +48,8 @@ component extends="oauth2" accessors="true" {
 		boolean force_reapprove = false,
 		boolean disable_signup  = false,
 		string locale           = '',
-		boolean force_reauthentication = false
+		boolean force_reauthentication = false,
+		boolean usePKCE = false
 	){
 		var sParams = {
 			'response_type'          = 'code',
@@ -62,17 +64,30 @@ component extends="oauth2" accessors="true" {
 		if( len( arguments.locale ) ){
 			structInsert( sParams, 'locale', arguments.locale );
 		}
+		if( arguments.usePKCE ){
+			var stuPKCE = super.generatePKCE();
+			setPKCE( stuPKCE );
+			structAppend( sParams, stuPKCE );
+		}
 		return super.buildRedirectToAuthURL( sParams );
 	}
 
 	/**
 	* I make the HTTP request to obtain the access token.
 	* @code The code returned from the authentication request.
+	* @usePKCE Boolean value. If true, the PKCE extension is triggered and will use the stored PKCE code_verifier
 	**/
 	public struct function makeAccessTokenRequest(
-		required string code
+		required string code,
+		boolean usePKCE = false
 	){
 		var aFormFields = [];
+		if( arguments.usePKCE ){
+			arrayAppend( aFormFields, {
+				'name': 'code_verifier',
+				'value': getPKCE()[ 'code_verifier' ]
+			} );
+		}
 		return super.makeAccessTokenRequest(
 			code       = arguments.code,
 			formfields = aFormFields

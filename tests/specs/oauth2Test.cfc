@@ -51,15 +51,11 @@ component extends='testbox.system.BaseSpec'{
 
 				it( 'should have the correct methods', function() {
 
-					makePublic( variables.oOauth2, 'generateRandomString', 'generateRandomString' );
-
 					expect( variables.oOauth2 ).toHaveKey( 'init' );
 					expect( variables.oOauth2 ).toHaveKey( 'buildRedirectToAuthURL' );
 					expect( variables.oOauth2 ).toHaveKey( 'makeAccessTokenRequest' );
 					expect( variables.oOauth2 ).toHaveKey( 'buildParamString' );
 					expect( variables.oOauth2 ).toHaveKey( 'getMemento' );
-					expect( variables.oOauth2 ).toHaveKey( 'generateRandomString' );
-					expect( variables.oOauth2 ).toHaveKey( 'generatePKCE' );
 
 				} );
 
@@ -99,17 +95,17 @@ component extends='testbox.system.BaseSpec'{
 
 				describe( 'The buildRedirectToAuthURL() method', function(){
 
-					it( 'should return the expected string value', function() {
+					it( 'should return the expected string value', function(){
 
 						var resp = variables.oOauth2.buildRedirectToAuthURL();
 
 						expect( resp ).toBeString();
 						expect( resp ).toBe(
 							authEndpoint & '?client_id=' & clientId
-							& '&redirect_uri=' & redirect_uri
+							& '&redirect_uri=' & redirect_uri & '&response_type=code'
 						);
 
-						expect( listToArray( resp, '&?' ) ).toHaveLength( 3 );
+						expect( listToArray( resp, '&?' ) ).toHaveLength( 4 );
 
 						var stuParamsIn = { 'one' = 'one', 'two' = 'two' };
 						// Now with params sent through
@@ -123,41 +119,76 @@ component extends='testbox.system.BaseSpec'{
 						var paramVals = mid( resp, 1, len( resp ) );
 
 						var arrValsOut = listToArray( paramVals, '?&' );
-						expect( arrValsOut ).toHaveLength( 5 );
+						expect( arrValsOut ).toHaveLength( 6 );
 
 						expect( arrValsOut[ 1 ] ).toBe( variables.authEndpoint );
 
 						arrValsOut = arraySlice( arrValsOut, 2 );
 
-						for( var item in arrValsOut ){
-							var thisKey = listGetAt( item, 1, '=' );
-							var thisVal = listGetAt( item, 2, '=' );
-							expect( structKeyExists( stuParamsIn, thisKey ) ).toBe( true );
-							expect( stuParamsIn[ thisKey ] ).toBe( thisVal );
-						}
-
-						expect( listToArray( resp, '&?' ) ).toHaveLength( 5 );
-
+						expect( listToArray( resp, '&?' ) ).toHaveLength( 6 );
 
 					} );
 
 				} );
 
-				describe( 'The generateRandomString() method', function() {
+				describe( 'The buildRedirectToAuthURLWithBuilder() method', function(){
 
-					it( 'should return a random string of the expected length', function() {
+					it( 'should return the expected authStringBuilder model', function() {
 
-						var resp = variables.oOauth2.generateRandomString();
-						expect( resp ).toBeString().toHaveLength( 100 );
+						var resp = variables.oOauth2.buildRedirectToAuthURLWithBuilder();
 
-						var resp2 = variables.oOauth2.generateRandomString( 45 );
-						expect( resp2 ).toBeString().toHaveLength( 45 );
+						expect( resp )
+							.toBeInstanceOf( 'utils.authStringBuilder' )
+							.toBeTypeOf( 'component' );
 
-						var resp3 = variables.oOauth2.generateRandomString( 20 );
-						expect( resp3 ).toBeString().toHaveLength( 100 );
+						var stuMemento = resp.paramsMemento();
 
-						var resp4 = variables.oOauth2.generateRandomString( 130 );
-						expect( resp4 ).toBeString().toHaveLength( 100 );
+						expect( stuMemento )
+							.toBeStruct()
+							.toHaveKey( 'client_id' )
+							.toHaveKey( 'redirect_uri' );
+
+						expect( stuMemento[ 'client_id' ] )
+							.toBeString()
+							.toBe( variables.clientId );
+
+						expect( stuMemento[ 'redirect_uri' ] )
+							.toBeString()
+							.toBe( variables.redirect_uri );
+
+					} );
+
+					it( 'should return the expected string value when the .get() method is called', function(){
+
+						var resp = variables.oOauth2.buildRedirectToAuthURLWithBuilder().get();
+
+						expect( resp ).toBeString();
+						expect( resp ).toBe(
+							authEndpoint & '?client_id=' & clientId
+							& '&redirect_uri=' & redirect_uri & '&response_type=code'
+						);
+
+						expect( listToArray( resp, '&?' ) ).toHaveLength( 4 );
+
+						var stuParamsIn = { 'one' = 'one', 'two' = 'two' };
+						// Now with params sent through
+						var resp = variables.oOauth2.buildRedirectToAuthURLWithBuilder(
+							parameters = stuParamsIn
+						).get();
+
+						expect( resp )
+							.toBeString();
+
+						var paramVals = mid( resp, 1, len( resp ) );
+
+						var arrValsOut = listToArray( paramVals, '?&' );
+						expect( arrValsOut ).toHaveLength( 6 );
+
+						expect( arrValsOut[ 1 ] ).toBe( variables.authEndpoint );
+
+						arrValsOut = arraySlice( arrValsOut, 2 );
+
+						expect( listToArray( resp, '&?' ) ).toHaveLength( 6 );
 
 					} );
 
@@ -167,7 +198,7 @@ component extends='testbox.system.BaseSpec'{
 
 					it( 'should return a struct of expected information', function() {
 
-						var resp = variables.oOauth2.generatePKCE( length = 100 );
+						var resp = variables.oOauth2.generatePKCE();
 
 						expect( resp )
 							.toBeStruct()
@@ -175,64 +206,7 @@ component extends='testbox.system.BaseSpec'{
 							.toHaveKey( 'code_challenge' )
 							.toHaveKey( 'code_challenge_method' );
 
-						expect( resp[ 'code_verifier' ] ).toBeString().toHaveLength( 100 );
 						expect( resp[ 'code_challenge_method' ] ).toBeString().toBe( 'S256' );
-
-						var resp = variables.oOauth2.generatePKCE( length = 43 );
-
-						expect( resp )
-							.toBeStruct()
-							.toHaveKey( 'code_verifier' )
-							.toHaveKey( 'code_challenge' )
-							.toHaveKey( 'code_challenge_method' );
-
-						expect( resp[ 'code_verifier' ] ).toBeString().toHaveLength( 43 );
-						expect( resp[ 'code_challenge_method' ] ).toBeString().toBe( 'S256' );
-
-					} );
-
-					it( 'should call the generateRandomString() method once', function() {
-
-						var mockObj = createMock( 'oauth2' ).init(
-							client_id           = variables.clientId,
-							client_secret       = variables.clientSecret,
-							authEndpoint        = variables.authEndpoint,
-							accessTokenEndpoint = variables.accessTokenEndpoint,
-							redirect_uri        = variables.redirect_uri
-						);
-
-						mockObj.$(
-							method = 'generateRandomString',
-							returns = 'RL0XW95rTty7gxZg6Kr07w-wt5f9fMKIVuBfe3e2QioIUTta'
-						);
-
-						var resp = mockObj.generatePKCE();
-						expect( mockObj.$count( 'generateRandomString' ) ).toBe( 1 );
-
-					} );
-
-				} );
-
-				describe( 'The makeAccessTokenRequestWithPKCE() method', function() {
-
-					it( 'should call the makeAccessTokenRequest() method', function() {
-
-						var mockObj = createMock( 'oauth2' ).init(
-							client_id           = variables.clientId,
-							client_secret       = variables.clientSecret,
-							authEndpoint        = variables.authEndpoint,
-							accessTokenEndpoint = variables.accessTokenEndpoint,
-							redirect_uri        = variables.redirect_uri
-						);
-
-						mockObj.$( method = 'makeAccessTokenRequest', returns = {} );
-
-						var resp = mockObj.makeAccessTokenRequestWithPKCE(
-							code = '123456',
-							code_verifier = '7890'
-						);
-
-						expect( mockObj.$count( 'makeAccessTokenRequest' ) ).toBe( 1 );
 
 					} );
 

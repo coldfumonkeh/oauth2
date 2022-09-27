@@ -37,11 +37,13 @@ component extends="oauth2" accessors="true" {
 	* @state A unique string value of your choice that is hard to guess. Used to prevent CSRF.
 	* @scope An optional array of values to pass through for scope access.
 	* @show_dialog Whether or not to force the user to approve the app again if they’ve already done so. If false (default), a user who has already approved the application may be automatically redirected to the URI specified by redirect_uri. If true, the user will not be automatically redirected and will have to approve the app again.
+	* @usePKCE Boolean value. If true, the PKCE extension is triggered and will generate PKCE data and also store it as a CFC property.
 	**/
 	public string function buildRedirectToAuthURL(
 		required string state,
 		array scope = [],
-		boolean show_dialog = false
+		boolean show_dialog = false,
+		boolean usePKCE = false
 	){
 		var sParams = {
 			'response_type' = 'code',
@@ -51,17 +53,30 @@ component extends="oauth2" accessors="true" {
 		if( arrayLen( arguments.scope ) ){
 			structInsert( sParams, 'scope', arrayToList( arguments.scope, ' ' ) );
 		}
+		if( arguments.usePKCE ){
+			var stuPKCE = super.generatePKCE();
+			setPKCE( stuPKCE );
+			structAppend( sParams, stuPKCE );
+		}
 		return super.buildRedirectToAuthURL( sParams );
 	}
 
 	/**
 	* I make the HTTP request to obtain the access token.
 	* @code The code returned from the authentication request.
+	* @usePKCE Boolean value. If true, the PKCE extension is triggered and will use the stored PKCE code_verifier
 	**/
 	public struct function makeAccessTokenRequest(
-		required string code
+		required string code,
+		boolean usePKCE = false
 	){
 		var aFormFields = [];
+		if( arguments.usePKCE ){
+			arrayAppend( aFormFields, {
+				'name': 'code_verifier',
+				'value': getPKCE()[ 'code_verifier' ]
+			} );
+		}
 		return super.makeAccessTokenRequest(
 			code       = arguments.code,
 			formfields = aFormFields

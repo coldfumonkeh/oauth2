@@ -49,11 +49,14 @@
             "URL":""
         }
     },
-    "dependencies":{},
+    "dependencies":{
+        "pkce":"^1.0.0"
+    },
     "devDependencies":{
-        "testbox":"^2.5.0+107"
+        "testbox":"^4.5.0+5"
     },
     "installPaths":{
-        "testbox":"testbox/"
+        "testbox":"testbox/",
+        "pkce":"utils/deps/pkce/"
     }
 }
